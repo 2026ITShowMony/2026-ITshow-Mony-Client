@@ -1,0 +1,26 @@
+
+
+.join1-bottomNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  color: rgba(255, 255, 255, 0.48);
+  margin-top: 6px;
+}
+
+.join1-bottomLink {
+  background: transparent;
+  border: none;
+  padding: 0;
+
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.join1-bottomDivider {
+  font-size: 12px;
+  opacity: 0.5;
+}
