@@ -1,0 +1,401 @@
+.ca-page {
+  min-height: 100vh;
+  background: #070707;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.ca-shell {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.ca-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ca-analysisFrame,
+.ca-card {
+  border-radius: 20px;
+  background: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24);
+}
+
+.ca-analysisFrame {
+  padding: 18px;
+}
+
+.ca-toolbar,
+.ca-cardHead,
+.ca-progressRow,
+.ca-fixedRow,
+.ca-fixedCardTop,
+.ca-fixedCardFoot,
+.ca-cardHeaderLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ca-toolbar {
+  padding: 2px 4px 16px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ca-toolbar span:last-child {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.ca-gridTop,
+.ca-middleGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.ca-gridTop {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.ca-card {
+  padding: 18px;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.ca-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+}
+
+.ca-cardHead p,
+.ca-cardHead strong,
+.ca-cardHead h3,
+.ca-fixedRow span,
+.ca-fixedRow small,
+.ca-tripMeta,
+.ca-tripCard p,
+.ca-tripCard small,
+.ca-weekScale span,
+.ca-weekBarWrap span {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.ca-cardHead strong,
+.ca-cardHead h3 {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 17px;
+  letter-spacing: -0.03em;
+}
+
+.ca-cardHead span {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.ca-card--weekly {
+  min-height: 360px;
+}
+
+.ca-progressPair {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ca-progressRow {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  gap: 10px;
+  align-items: center;
+}
+
+.ca-progressRow span,
+.ca-progressRow strong {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+}
+
+.ca-progressTrack {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.ca-progressFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: 0% 50%;
+}
+
+.ca-progressFill.is-orange {
+  background: linear-gradient(90deg, #d66b34, #f2854d);
+}
+
+.ca-progressFill.is-lime {
+  background: linear-gradient(90deg, #d7ff47, #b9e72d);
+}
+
+.ca-miniGrid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ca-miniCard {
+  min-height: 92px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ca-miniCard span,
+.ca-miniCard small {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 11px;
+}
+
+.ca-miniCard strong {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+}
+
+.ca-card--chart {
+  min-height: 360px;
+}
+
+.ca-weekChart {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ca-weekScale {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.ca-weekBars {
+  height: 220px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+}
+
+.ca-weekBarWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.ca-weekBarWrap span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ca-weekBar {
+  width: 100%;
+  max-width: 28px;
+  border-radius: 8px 8px 0 0;
+  background: #bababa;
+  transform-origin: 50% 100%;
+}
+
+.ca-weekBar.is-active {
+  background: #d7ff47;
+}
+
+.ca-middleGrid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.ca-card--fixed,
+.ca-card--travel {
+  min-height: 340px;
+}
+
+.ca-fixedSummary {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ca-fixedRow {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.ca-fixedRow strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+}
+
+.ca-fixedGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ca-fixedCard {
+  min-height: 138px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ca-fixedCard strong,
+.ca-fixedCard span,
+.ca-fixedCard small {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ca-fixedCardTop {
+  align-items: flex-start;
+}
+
+.ca-fixedCardTop strong {
+  font-size: 14px;
+}
+
+.ca-fixedCardTop span {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.ca-fixedCardFoot {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.ca-fixedCardFoot small,
+.ca-fixedCardFoot span {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.ca-tripCards {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ca-tripCard {
+  min-height: 132px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ca-tripCard strong,
+.ca-tripCard h4,
+.ca-tripCard p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ca-tripCard h4 {
+  font-size: 15px;
+  letter-spacing: -0.03em;
+}
+
+.ca-tripCard p {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: auto;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.ca-tripThumbs {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ca-tripThumb {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.98);
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.ca-tripThumb span {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1200px) {
+  .ca-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-gridTop,
+  .ca-middleGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-tripCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ca-tripThumbs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .ca-page {
+    padding: 12px;
+  }
+
+  .ca-miniGrid,
+  .ca-fixedSummary,
+  .ca-fixedGrid,
+  .ca-tripCards,
+  .ca-tripThumbs {
+    grid-template-columns: 1fr;
+  }
+}
