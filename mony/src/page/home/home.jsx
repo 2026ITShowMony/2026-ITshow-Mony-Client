@@ -1,47 +1,30 @@
 import { motion } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
+import Banner from "../../component/banner";
+import profile from "../../assets/home/homeprofile.png";
+import Char from "../../assets/home/char.svg";
+import Logo from "../../assets/menu/Logo.svg";
+import Economy from "../../assets/home/economy.svg";
+import Young from "../../assets/home/young.svg";
+import HomeIcon from "../../assets/home/home.svg";
+import Dog from "../../assets/home/dog.svg";
+import Cancer from "../../assets/home/cancer.svg";
+import Health from "../../assets/home/health.svg";
+import Apartment from "../../assets/home/apartement.svg";
+import Database from "../../assets/home/database.svg";
+import Policy from "../../assets/home/policy.svg";
+import Refresh from "../../assets/home/formkit_refresh.svg";
+
 import "./home.css";
 import {
   CountUp,
   ProgressFill,
   cardMotion,
-  buttonMotion,
   staggerContainerVariants,
   staggerItemVariants,
   revealVariants,
 } from "../../component/homeMotion.jsx";
-
-const highlightCards = [
-  {
-    no: "01",
-    title: "일상 속\n작은 즐거움",
-    desc: "간편한 소비의 일면을 담아봤어요",
-    tags: "#일상의 #리노 #한정감",
-    tone: "stone",
-  },
-  {
-    no: "02",
-    title: "페스트\n패션과 쇼핑",
-    desc: "충동 구매가 많아 보이네요",
-    tags: "#유니크로 #세련미로 #나이스",
-    tone: "blue",
-  },
-  {
-    no: "03",
-    title: "나를\n위한 소비",
-    desc: "취미 소비가 전체를 차지해요",
-    tags: "#부수지출 #불균형 #분석",
-    tone: "green",
-  },
-  {
-    no: "04",
-    title: "벚꽃이 핀\n봄나들이",
-    desc: "계절 맞춤 소비가 보이네요",
-    tags: "#따뜻함 #보드라움 #한달",
-    tone: "pink",
-  },
-];
 
 const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
 const weekDates = ["29", "30", "31", "1", "2", "3", "4"];
@@ -73,6 +56,70 @@ const quickEntries = [
   { icon: "◔", label: "카테고리", value: "식비 31%", note: "식비 비중이 조금 높아요" },
 ];
 
+const benefitRows = [
+  {
+    amount: "2,100원",
+    period: "3-4월의 혜택",
+    cardName: "현대 제로 카드",
+    pointTitle: "포인트 적립",
+    pointValue: "2,100원",
+    discountTitle: "누적 결제 할인 혜택",
+    discountValue: "100원",
+  },
+  {
+    amount: "17원",
+    period: "3-4월의 혜택",
+    cardName: "카카오페이머니",
+    pointTitle: "포인트 적립",
+    pointValue: "17원",
+    discountTitle: "누적 결제 할인 혜택",
+    discountValue: "0원",
+  },
+];
+
+const talkGroups = [
+  {
+    key: "youth",
+    title: "청년&생활",
+    items: [
+      { icon: Economy, label: "취업역량강화", title: "경기청년 갚이여" },
+      { icon: Young, label: "법정공휴일", title: "5월 1일은 공휴일" },
+      { icon: HomeIcon, label: "봄나들이", title: "숙박세일 페스타" },
+    ],
+  },
+  {
+    key: "insurance",
+    title: "보험",
+    items: [
+      { icon: Dog, label: "반려보험", title: "강아지 보험을 점검해요" },
+      { icon: Cancer, label: "건강보험", title: "보장 항목을 다시 살펴봐요" },
+      { icon: Health, label: "실손보험", title: "병원비 부담을 줄여요" },
+    ],
+  },
+  {
+    key: "realestate",
+    title: "부동산",
+    items: [
+      { icon: Apartment, label: "전세/월세", title: "보증금과 대출을 비교해요" },
+      { icon: Database, label: "청약", title: "분양 일정과 조건을 확인해요" },
+      { icon: Policy, label: "정책", title: "지원 정책을 먼저 체크해요" },
+    ],
+  },
+];
+
+const activeTalkGroup = talkGroups[0];
+
+const currentMonthLabel = "2026년 3월";
+const todayLabel = getTodayLabel(new Date("2026-03-31T00:00:00"));
+
+function getTodayLabel(date = new Date()) {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const weekday = weekDays[date.getDay()];
+
+  return `오늘 · ${month}월 ${day}일 (${weekday})`;
+}
+
 export default function Home() {
   return (
     <main className="home-page">
@@ -81,61 +128,7 @@ export default function Home() {
 
         <section className="home-main">
           <HomeHeader />
-
-          <motion.section
-            className="home-hero"
-            variants={staggerContainerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.18 }}
-          >
-            <motion.div className="home-heroIntro" variants={staggerItemVariants}>
-              <div className="home-heroIndex">01</div>
-              <h2 className="home-heroTitle">
-                이번 주의 소비를 한 번
-                <br />
-                살펴볼까요?
-              </h2>
-              <p className="home-heroDesc">
-                MONY와 함께한 4월의 1주차의 소비 기록으로 인사이트를 보여드려요
-              </p>
-              <motion.button
-                className="home-heroButton"
-                type="button"
-                {...buttonMotion}
-              >
-                소비관리 더보기
-                <span aria-hidden="true">↗</span>
-              </motion.button>
-            </motion.div>
-
-            <motion.div
-              className="home-heroCards"
-              aria-label="주간 인사이트"
-              variants={staggerContainerVariants}
-            >
-              {highlightCards.map((card) => (
-                <motion.article
-                  key={card.no}
-                  className={`home-insightCard is-${card.tone}`}
-                  variants={staggerItemVariants}
-                  {...cardMotion}
-                >
-                  <div className="home-insightNo">{card.no}</div>
-                  <h3 className="home-insightTitle">
-                    {card.title.split("\n").map((line, index, lines) => (
-                      <span key={`${card.no}-${line}-${index}`}>
-                        {line}
-                        {index < lines.length - 1 ? <br /> : null}
-                      </span>
-                    ))}
-                  </h3>
-                  <p className="home-insightDesc">{card.desc}</p>
-                  <p className="home-insightTags">{card.tags}</p>
-                </motion.article>
-              ))}
-            </motion.div>
-          </motion.section>
+          <Banner />
 
           <motion.section
             className="home-metrics"
@@ -144,7 +137,11 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.22 }}
           >
-            <motion.article className="home-metricCard" variants={staggerItemVariants} {...cardMotion}>
+            <motion.article
+              className="home-metricCard home-metricCard--goal"
+              variants={staggerItemVariants}
+              {...cardMotion}
+            >
               <p className="home-metricLabel">4월의 소비 목표</p>
               <div className="home-metricRow">
                 <h3>천천히 소비하기</h3>
@@ -157,7 +154,11 @@ export default function Home() {
               </div>
             </motion.article>
 
-            <motion.article className="home-metricCard" variants={staggerItemVariants} {...cardMotion}>
+            <motion.article
+              className="home-metricCard home-metricCard--spending"
+              variants={staggerItemVariants}
+              {...cardMotion}
+            >
               <p className="home-metricLabel">이번 달의 소비</p>
               <div className="home-metricRow">
                 <h3>김수한무의 카방카드</h3>
@@ -169,20 +170,20 @@ export default function Home() {
             </motion.article>
 
             <motion.article
-              className="home-metricCard home-metricCard--accent"
+              className="home-metricCard home-metricCard--accent home-metricCard--today"
               variants={staggerItemVariants}
               {...cardMotion}
             >
-              <p className="home-metricLabel">오늘의 소비</p>
-              <div className="home-metricRow">
-                <h3 className="home-metricInline">
-                  총 <CountUp value={28000} suffix="원" /> / <CountUp value={100000} suffix="원" />
-                </h3>
+              <div className="home-todayContent">
+                <p className="home-metricLabel">오늘의 소비</p>
+                <div className="home-metricRow">
+                  <h3 className="home-metricInline">
+                    총 <CountUp value={28000} suffix="원" /> / <CountUp value={100000} suffix="원" />
+                  </h3>
+                </div>
+                <p className="home-muted">하루 소비 목표 금액에 도달하지 않았어요</p>
               </div>
-              <p className="home-muted">하루 소비 목표 금액에 도달하지 않았어요</p>
-              <div className="home-star" aria-hidden="true">
-                ★
-              </div>
+              <img className="home-profileImage" src={profile} alt="" aria-hidden="true" />
             </motion.article>
           </motion.section>
 
@@ -193,7 +194,7 @@ export default function Home() {
             whileInView="show"
             viewport={{ once: true, amount: 0.35 }}
           >
-            <h3>김수한무 님의 활발한 4월의 소비를 확인해보세요!</h3>
+            <h3>김수한무 님의 활발한 4월의 소비를 확인해보세요! 🍃</h3>
           </motion.section>
 
           <motion.section
@@ -204,8 +205,9 @@ export default function Home() {
             viewport={{ once: true, amount: 0.18 }}
           >
             <motion.article className="home-panelCard" variants={staggerItemVariants} {...cardMotion}>
-              <p className="home-panelMeta">2026년 3월</p>
-              <h3 className="home-panelTitle">오늘 · 3월 31일 (수)</h3>
+              <p className="home-panelMeta">{currentMonthLabel}</p>
+              <h3 className="home-panelTitle">{todayLabel}</h3>
+
               <div className="home-calendar">
                 <div className="home-calendarHead">
                   {weekDays.map((day) => (
@@ -235,7 +237,7 @@ export default function Home() {
             </motion.article>
 
             <motion.article className="home-panelCard" variants={staggerItemVariants} {...cardMotion}>
-              <p className="home-panelMeta">2026년 3월</p>
+              <p className="home-panelMeta">{currentMonthLabel}</p>
               <h3 className="home-panelTitle">최근 사용 내역</h3>
 
               <div className="home-summaryCard">
@@ -268,7 +270,96 @@ export default function Home() {
               </div>
             </motion.article>
           </motion.section>
+          <motion.section
+            className="home-bottomFeature"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.18 }}
+          >
+            <motion.h3 className="home-bottomFeatureTitle" variants={staggerItemVariants}>
+              김수한무 님만을 위한 소비 이야기를 발견해보세요 ⭐
+            </motion.h3>
+
+            <div className="home-bottomFeatureGrid">
+              <motion.article className="home-featureCard home-featureCard--benefit" variants={staggerItemVariants} {...cardMotion}>
+                <div className="home-featureHeader">
+                  <div>
+                    <p className="home-featureLabel">결제 수단 혜택</p>
+                    <h4 className="home-featureTitle">현대카드</h4>
+                  </div>
+                  <img className="home-featureAvatar" src={profile} alt="" aria-hidden="true" />
+                </div>
+
+                <div className="home-benefitList">
+                  {benefitRows.map((row) => (
+                    <div key={row.cardName} className="home-benefitRow">
+                      <div className="home-benefitMain">
+                        <strong>{row.amount}</strong>
+                        <span>{row.period}</span>
+                      </div>
+
+                      <div className="home-benefitCardName">
+                        <span>결제 혜택 지정 카드</span>
+                        <strong>{row.cardName}</strong>
+                      </div>
+
+                      <div className="home-benefitMeta">
+                        <div>
+                          <span>{row.pointTitle}</span>
+                          <strong>{row.pointValue}</strong>
+                        </div>
+                        <div>
+                          <span>{row.discountTitle}</span>
+                          <strong>{row.discountValue}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.article>
+
+              <motion.article className="home-featureCard home-featureCard--talk" variants={staggerItemVariants} {...cardMotion}>
+                <div className="home-featureHeader">
+                  <div>
+                    <p className="home-featureLabel">모니 TALK</p>
+                    <h4 className="home-featureTitle is-lime">{activeTalkGroup.title}</h4>
+                  </div>
+                  <button type="button" className="home-featureRefresh" aria-label="새로고침">
+                    <img src={Refresh} alt="" aria-hidden="true" />
+                  </button>
+                </div>
+
+                <div className="home-talkList">
+                  {activeTalkGroup.items.map((item) => (
+                    <button key={item.title} type="button" className="home-talkItem">
+                      <img className="home-talkIconImage" src={item.icon} alt="" aria-hidden="true" />
+                      <span className="home-talkText">
+                        <small>{item.label}</small>
+                        <strong>{item.title}</strong>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </motion.article>
+
+              <motion.article className="home-featureCard home-featureCard--budget" variants={staggerItemVariants} {...cardMotion}>
+                <p className="home-featureLabel">예산목표를 설정해볼까요?</p>
+                <div className="home-budgetBubble">
+                  <span>모니와 함께</span>
+                  <strong>슬로우 소비를</strong>
+                  <strong>실천해요!</strong>
+                </div>
+                <img className="home-budgetAvatar" src={profile} alt="" aria-hidden="true" />
+              </motion.article>
+            </div>
+          </motion.section>
+          <div className="footer">
+            <p>소비에 더 나은 이유를,</p>
+            <img className="footerLogo" src={Logo} alt="Mony" />
+          </div>
         </section>
+        
       </div>
     </main>
   );
