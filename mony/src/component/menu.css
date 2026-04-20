@@ -1,8 +1,8 @@
 .menu {
   width: 100%;
-  min-height: calc(100vh - 32px);
+  min-height: 820px;
   border-radius: 24px;
-  padding: 28px 18px;
+  padding: 28px 18px; 
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -134,7 +134,7 @@
 .menu-bottom h4 {
   margin: 0 0 4px;
   color: #cdff4e;
-  font-size: 19px;
+  font-size: 12.324px;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.03em;
@@ -151,7 +151,7 @@
   text-align: center;
   color: rgba(255, 255, 255, 0.96);
   background: rgba(255, 255, 255, 0.02);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 1.35;
   letter-spacing: -0.03em;
@@ -163,18 +163,21 @@
   padding: 20px 20px 24px;
   color: rgba(255, 255, 255, 0.96);
   background: rgba(255, 255, 255, 0.02);
-  font-size: 14px;
-  line-height: 1.55;
-  letter-spacing: -0.02em;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18.486px; /* 154.054% */
+  letter-spacing: -0.24px;
 }
 
 .menu-bottom-context .title {
   display: block;
   margin-bottom: 14px;
-  font-size: 14px;
+  font-size: 12px;
+  font-style: normal;
   font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.03em;
+  line-height: 18.486px; /* 154.054% */
+  letter-spacing: -0.24px;
 }
 
 .menu-bottom > p {
