@@ -9,8 +9,8 @@
   width: min(1440px, 100%);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: 228px minmax(0, 1fr);
+  gap: 10px;
   align-items: start;
 }
 
@@ -18,7 +18,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .ca-analysisFrame,
@@ -60,7 +60,7 @@
 .ca-gridTop,
 .ca-middleGrid {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .ca-gridTop {
