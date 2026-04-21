@@ -158,8 +158,8 @@ html, body {
 }
 
 .join1-button.is-enabled {
-  background: #3A5DFF;
-  color: #ffffff;
+  background: #CDFF4E;
+  color: #000000;
   cursor: pointer;
 }
 
@@ -263,8 +263,9 @@ html, body {
 }
 
 .goalCard.is-selected {
-  background: #3A5DFF;
+  background: #CDFF4E;
   border-color: rgba(255, 255, 255, 0.0);
+  color: #000000;
 }
 
 .goalIcon {
@@ -298,7 +299,7 @@ html, body {
 }
 
 .goalCard.is-selected .goalDesc {
-  color: rgba(255, 255, 255, 0.90);
+  color: rgba(0, 0, 0, 0.72);
 }
 
 .field {
@@ -332,9 +333,9 @@ html, body {
 }
 
 .chip.is-on {
-  background: #3A5DFF;
-  border-color: #3A5DFF;
-  color: #ffffff;
+  background: #CDFF4E;
+  border-color: #CDFF4E;
+  color: #000000;
 }
 
 .chip.is-disabled {
