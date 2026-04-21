@@ -126,9 +126,9 @@ export function ProgressFill({ value, className = "", duration = 1.15, amount = 
   const reduceMotion = useReducedMotion();
 
   return (
-    <motion.span
+    <motion.div
       className={className}
-      style={{ transformOrigin: "0% 50%" }}
+      style={{ transformOrigin: "0% 50%", width: "100%", height: "100%" }}
       initial={reduceMotion ? false : { scaleX: 0 }}
       whileInView={{ scaleX: value }}
       viewport={{ once: true, amount }}
