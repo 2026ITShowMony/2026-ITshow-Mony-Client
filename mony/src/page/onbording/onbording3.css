@@ -123,8 +123,8 @@ html, body {
 }
 
 .join1-button.is-enabled {
-  background: #3A5DFF;
-  color: #ffffff;
+  background: #CDFF4E;
+  color: #000000;
   cursor: pointer;
 }
 
@@ -209,8 +209,14 @@ html, body {
 
 /* 선택 시: 파란색 꽉 채움 */
 .join3-option.is-on {
-  background: #3A5DFF;
-  border-color: #3A5DFF;
+  background: #CDFF4E;
+  border-color: #CDFF4E;
+}
+
+.join3-option.is-on,
+.join3-option.is-on .join3-icon,
+.join3-option.is-on .join3-optionText {
+  color: #000000;
 }
 
 /* 하위 폼 */
