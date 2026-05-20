@@ -110,7 +110,15 @@
 }
 
 .cm-overview {
+  padding-top: 20px;
+  padding-bottom: 20px;
   grid-template-columns: 226px minmax(0, 1fr);
+}
+
+.cm-section{
+  background-color: #101010;
+  border-radius: 20px;
+  padding: 20px;
 }
 
 .cm-card {
@@ -124,14 +132,29 @@
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
 }
 
-.cm-card--featured {
+.cm-card--challenge {
   min-height: 330px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.cm-featuredHead,
+.cm-challengeHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cm-challengeHead p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
 .cm-cardHeaderLine {
   display: flex;
   align-items: flex-start;
@@ -139,107 +162,94 @@
   gap: 12px;
 }
 
-.cm-featuredHead p,
-.cm-featuredHead h2,
+
+.cm-cardHeaderLine span{
+  margin-top: 48px;
+  margin-right: 32px;
+}
+
 .cm-cardTitle {
+  padding: 25px;
   margin: 0;
   letter-spacing: -0.04em;
 }
 
-.cm-featuredHead p {
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 16px;
-  line-height: 1.35;
-}
-
-.cm-featuredHead h2 {
-  color: #fff;
-  font-size: 22px;
-  line-height: 1.25;
-  margin-top: 2px;
-}
-
-.cm-featuredHead span,
+.cm-challengeHead span,
 .cm-cardHeaderLine span {
   color: rgba(255, 255, 255, 0.84);
   font-size: 24px;
   line-height: 1;
 }
 
-.cm-cardMock {
+.cm-challengeAmounts {
   flex: 1;
-  border-radius: 18px;
-  background: linear-gradient(180deg, #01977a 0%, #048f6e 100%);
-  position: relative;
-  overflow: hidden;
-  min-height: 210px;
-}
-
-.cm-cardMock::after {
-  content: "";
-  position: absolute;
-  inset: auto -24px -36px auto;
-  width: 142px;
-  height: 142px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.14);
-}
-
-.cm-cardMockChip {
-  position: absolute;
-  top: 18px;
-  left: 22px;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.cm-cardMockBadge {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  color: rgba(255, 255, 255, 0.98);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-.cm-cardMockBrand {
-  position: absolute;
-  left: 18px;
-  bottom: 16px;
   display: flex;
-  gap: -8px;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
 }
 
-.cm-cardMockBrand span {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: block;
-}
-
-.cm-cardMockBrand span:first-child {
-  background: #ff4f3c;
-}
-
-.cm-cardMockBrand span:last-child {
-  margin-left: -8px;
-  background: #ffb02f;
-}
-
-.cm-cardInfo {
+.cm-challengeAmounts > div {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  color: rgba(255, 255, 255, 0.88);
 }
 
-.cm-cardInfo strong {
-  color: #fff;
-  font-size: 14px;
+.cm-challengeAmounts > div > span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.cm-challengeAmounts > div > strong {
+  font-size: 28px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.96);
+  letter-spacing: -0.05em;
+}
+
+.cm-challengeAmounts > div > strong.is-lime {
+  color: #d7ff47;
+}
+
+.cm-challengeProgress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cm-challengeBar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.cm-challengeFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: 0% 50%;
+  background: linear-gradient(90deg, #d7ff47, #f1ff70);
+}
+
+.cm-challengePct {
+  font-size: 13px;
+  font-weight: 800;
+  color: #d7ff47;
+  min-width: 34px;
+  text-align: right;
+}
+
+.cm-challengeRemain {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.cm-challengeRemain strong {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .cm-overviewRight {
@@ -434,6 +444,7 @@
 }
 
 .cm-bottomGrid {
+  margin-bottom: 30px;
   grid-template-columns: 1.08fr 1fr;
 }
 
@@ -476,7 +487,9 @@
 }
 
 .cm-cardMeta {
-  margin-bottom: 4px;
+  margin-top: 20px;
+  margin-left: 30px;
+  font-weight: 500;
 }
 
 .cm-calendar {
@@ -590,6 +603,97 @@
 
 .cm-logBubble.is-five {
   background: radial-gradient(circle at 35% 35%, #8c3414, #31140d);
+}
+
+/* ── 카테고리 절약 힌트 ── */
+.cm-categoryReducible {
+  margin: 0;
+  font-size: 11px;
+  color: rgba(215, 255, 71, 0.65);
+}
+
+/* ── 저금통에 넣기 버튼 & 토스트 ── */
+.cm-historyRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cm-historyRow--rich {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.cm-historyMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cm-historyFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cm-historyHint {
+  font-size: 11px;
+  color: rgba(215, 255, 71, 0.72);
+  flex: 1;
+}
+
+.cm-historyName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-piggyBtn {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(215, 255, 71, 0.3);
+  background: rgba(215, 255, 71, 0.08);
+  color: #d7ff47;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 140ms, border-color 140ms;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.cm-piggyBtn:hover {
+  background: rgba(215, 255, 71, 0.16);
+  border-color: rgba(215, 255, 71, 0.5);
+}
+
+.cm-piggyToast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: 14px;
+  background: rgba(22, 22, 22, 0.97);
+  border: 1px solid rgba(215, 255, 71, 0.3);
+  color: #d7ff47;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 200;
+  white-space: nowrap;
+  animation: cmPiggyIn 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes cmPiggyIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 @media (max-width: 1200px) {
