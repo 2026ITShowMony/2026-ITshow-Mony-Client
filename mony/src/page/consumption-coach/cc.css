@@ -393,6 +393,72 @@
   white-space: nowrap;
 }
 
+/* ── 저축 추천 카드 (라임 틴트) ── */
+.cc-promptCard--savings {
+  border-color: rgba(215, 255, 71, 0.12);
+  background: rgba(215, 255, 71, 0.04);
+}
+
+.cc-promptCard--savings:hover {
+  background: rgba(215, 255, 71, 0.09);
+}
+
+.cc-promptCard--savings .cc-promptIcon {
+  color: rgba(215, 255, 71, 0.55);
+}
+
+.cc-promptCard--savings .cc-promptTitle {
+  color: rgba(215, 255, 71, 0.9);
+}
+
+/* ── 코치 채팅 내 저금통 버튼 ── */
+.cc-piggyInlineBtn {
+  align-self: flex-start;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(215, 255, 71, 0.28);
+  background: rgba(215, 255, 71, 0.07);
+  color: #d7ff47;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 140ms, border-color 140ms;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.cc-piggyInlineBtn:hover {
+  background: rgba(215, 255, 71, 0.14);
+  border-color: rgba(215, 255, 71, 0.44);
+}
+
+.cc-piggyInlineBtn:active {
+  transform: translateY(1px);
+}
+
+/* ── 저금통 적립 토스트 ── */
+.cc-saveToast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: 14px;
+  background: rgba(22, 22, 22, 0.97);
+  border: 1px solid rgba(215, 255, 71, 0.3);
+  color: #d7ff47;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 200;
+  white-space: nowrap;
+  animation: ccSaveIn 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes ccSaveIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
