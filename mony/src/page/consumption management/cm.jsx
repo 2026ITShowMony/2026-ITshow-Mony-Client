@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion as Motion } from "framer-motion";
+import { goals as goalsApi, analysis } from "../../api/index.js";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
 import Coinimg from "../../assets/cm/coin.png";
@@ -89,11 +90,6 @@ const categoryDetailRows = [
   { date: "3월 19일", name: "팻어케이크", time: "17:36/국내", amount: "-28,500원" },
 ];
 
-const categoryItems = [
-  { name: "식사/외식", value: 60, color: "food", icon: FoodIcon },
-  { name: "쇼핑", value: 30, color: "shopping", icon: ShoppingIcon },
-  { name: "교통", value: 12, color: "traffic", icon: TrafficIcon },
-];
 
 const logCategories = ["식사/외식", "쇼핑", "여행", "취미", "장소", "기타"];
 
@@ -147,14 +143,54 @@ export default function Cm() {
   const [activeLogCategory, setActiveLogCategory] = useState("식사/외식");
   const [savedAmount] = useState(() => {
     const v = Number(localStorage.getItem("mony_saved_amount"));
-    return v > 0 ? v : 326000;
+    return v > 0 ? v : 0;
   });
-  const savingsGoal =
-    Number(localStorage.getItem("mony_savings_goal")) || 500000;
+  const [savingsGoal, setSavingsGoal] = useState(
+    () => Number(localStorage.getItem("mony_savings_goal")) || 500000,
+  );
+  const [categoryItems, setCategoryItems] = useState([
+    { name: "식사/외식", value: 60, color: "food", icon: FoodIcon },
+    { name: "쇼핑", value: 30, color: "shopping", icon: ShoppingIcon },
+    { name: "교통", value: 12, color: "traffic", icon: TrafficIcon },
+  ]);
+
   const savingsPct = Math.min(
     100,
     Math.round((savedAmount / savingsGoal) * 100),
   );
+
+  useEffect(() => {
+    const periodDetail = new Date().toISOString().slice(0, 7);
+
+    goalsApi.getAll()
+      .then((res) => {
+        const monthly = res.data?.find(
+          (g) => g.period_type === "monthly" && g.period_detail === periodDetail,
+        ) ?? res.data?.[0];
+        if (monthly?.target_amount) setSavingsGoal(monthly.target_amount);
+      })
+      .catch(() => {});
+
+    analysis.category(periodDetail)
+      .then((res) => {
+        if (!res.data?.length) return;
+        const total = res.data.reduce((s, c) => s + c.total, 0);
+        if (total === 0) return;
+        const iconMap = { 식비: FoodIcon, 쇼핑: ShoppingIcon, 교통: TrafficIcon };
+        const colorMap = { 식비: "food", 쇼핑: "shopping", 교통: "traffic" };
+        const items = res.data
+          .sort((a, b) => b.total - a.total)
+          .slice(0, 3)
+          .map((c) => ({
+            name: c.category,
+            value: Math.round((c.total / total) * 100),
+            color: colorMap[c.category] ?? "food",
+            icon: iconMap[c.category] ?? FoodIcon,
+          }));
+        if (items.length > 0) setCategoryItems(items);
+      })
+      .catch(() => {});
+  }, []);
 
   const historyTitle = historyPage === 0 ? "최근 사용 내역" : "카테고리 소비";
   const goToPrevHistory = () => setHistoryPage((page) => (page === 0 ? 1 : 0));

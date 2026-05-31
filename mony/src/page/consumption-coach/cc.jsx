@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { goals as goalsApi, buckets as bucketsApi, analysis } from "../../api/index.js";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
 import charSvg from "../../assets/home/char.svg";
@@ -11,22 +12,27 @@ import {
 } from "../../component/homeMotion";
 import "./cc.css";
 
-// ── .env 에서 API 키 로드 ──
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const GROQ_URL = "http://localhost:3001/api/groq";
+const GROQ_URL = "/api/groq";
 
-// ── 시스템 프롬프트 ──
-const SYSTEM_PROMPT = `당신은 MONY 앱의 소비 코치입니다.
+function buildSystemPrompt({ savingsGoal, savedAmount, totalSpent, bucket }) {
+  const pct = savingsGoal > 0 ? Math.round((savedAmount / savingsGoal) * 100) : 0;
+  const remain = Math.max(0, savingsGoal - savedAmount);
+  const bucketPct = bucket?.mony_ing > 0
+    ? Math.round(((bucket.mony_finish || 0) / bucket.mony_ing) * 100)
+    : 0;
+
+  return `당신은 MONY 앱의 소비 코치입니다.
 사용자 정보:
-- 이름: 김수한무
-- 이번 달 총 지출: 428,000원
-- 식비: 12% 증가
-- 쇼핑: 8% 감소
-- 전체 소비 증감: +5%
-- 저금통 목표: 500,000원
-- 현재 적립: 326,000원
-- 달성률: 65%
-- 남은 금액: 174,000원
+- 이번 달 저축 목표: ${savingsGoal.toLocaleString()}원
+- 현재 저축 적립: ${savedAmount.toLocaleString()}원
+- 달성률: ${pct}%
+- 남은 저축 금액: ${remain.toLocaleString()}원${
+    totalSpent > 0 ? `\n- 이번 달 총 지출: ${totalSpent.toLocaleString()}원` : ""
+  }${
+    bucket
+      ? `\n- 버킷리스트 목표: ${bucket.title}\n- 목표 금액: ${(bucket.mony_ing || 0).toLocaleString()}원\n- 현재 모인 금액: ${(bucket.mony_finish || 0).toLocaleString()}원\n- 달성률: ${bucketPct}%`
+      : ""
+  }
 
 규칙:
 1. 2~4문장으로 간결하게 답변하세요.
@@ -34,6 +40,7 @@ const SYSTEM_PROMPT = `당신은 MONY 앱의 소비 코치입니다.
 3. 구체적인 수치를 언급하세요.
 4. 한국어로만 답변하세요.
 5. 마크다운 기호(**, ##, - 등)는 절대 사용하지 마세요. 일반 텍스트로만 답변하세요.`;
+}
 
 const quickCards = [
   { title: "이번 달 소비 분석", text: "지출 패턴,소비 흐름" },
@@ -84,7 +91,7 @@ const formatTime = (date = new Date()) =>
   date.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
 
 // ── Groq API 호출 ──
-const callGroq = async (userText, history) => {
+const callGroq = async (userText, history, systemPrompt) => {
   const contents =
     history.length === 0
       ? [{ role: "user", parts: [{ text: userText }] }]
@@ -93,7 +100,7 @@ const callGroq = async (userText, history) => {
   const res = await fetch(GROQ_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contents, system_prompt: SYSTEM_PROMPT }),
+    body: JSON.stringify({ contents, system_prompt: systemPrompt }),
   });
 
   if (!res.ok) {
@@ -114,11 +121,39 @@ export default function CC() {
 
   const groqHistory = useRef([]);
   const chatEndRef = useRef(null);
+  const systemPromptRef = useRef(buildSystemPrompt({
+    savingsGoal: Number(localStorage.getItem("mony_savings_goal")) || 100000,
+    savedAmount: Number(localStorage.getItem("mony_saved_amount")) || 0,
+    totalSpent: 0,
+    bucket: null,
+  }));
   const hasChatted = messages.length > 0;
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
+
+  useEffect(() => {
+    const periodDetail = new Date().toISOString().slice(0, 7);
+    const savedAmount = Number(localStorage.getItem("mony_saved_amount")) || 0;
+
+    Promise.all([
+      goalsApi.getAll().catch(() => ({ data: [] })),
+      bucketsApi.getAll().catch(() => ({ data: [] })),
+      analysis.summary(periodDetail).catch(() => null),
+    ]).then(([goalsRes, bucketsRes, summaryRes]) => {
+      const monthly = goalsRes.data?.find(
+        (g) => g.period_type === "monthly" && g.period_detail === periodDetail,
+      ) ?? goalsRes.data?.[0];
+
+      systemPromptRef.current = buildSystemPrompt({
+        savingsGoal: monthly?.target_amount || Number(localStorage.getItem("mony_savings_goal")) || 100000,
+        savedAmount,
+        totalSpent: summaryRes?.data?.total || 0,
+        bucket: bucketsRes.data?.[0] || null,
+      });
+    });
+  }, []);
 
   const handleCcSave = (amount) => {
     const prev = Number(localStorage.getItem("mony_saved_amount") ?? 0);
@@ -148,7 +183,7 @@ export default function CC() {
     setIsLoading(true);
 
     try {
-      const replyText = await callGroq(content, groqHistory.current);
+      const replyText = await callGroq(content, groqHistory.current, systemPromptRef.current);
 
       groqHistory.current = [
         ...groqHistory.current,

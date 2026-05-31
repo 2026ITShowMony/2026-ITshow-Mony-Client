@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
+import { goals as goalsApi, buckets as bucketsApi } from "../../api/index.js";
 import Banner from "../../component/banner";
 import profile from "../../assets/home/homeprofile.svg";
 import Char from "../../assets/home/char.svg";
@@ -289,6 +290,30 @@ export default function Home() {
 
   useEffect(() => {
     setBucketGoal(getBucketGoal());
+
+    const periodDetail = new Date().toISOString().slice(0, 7);
+
+    goalsApi.getAll()
+      .then((res) => {
+        const monthly = res.data?.find(
+          (g) => g.period_type === "monthly" && g.period_detail === periodDetail,
+        ) ?? res.data?.[0];
+        if (monthly?.target_amount) setSavingsGoal(monthly.target_amount);
+      })
+      .catch(() => {});
+
+    bucketsApi.getAll()
+      .then((res) => {
+        const first = res.data?.[0];
+        if (first) {
+          setBucketGoal({
+            bucketList: first.title,
+            targetAmount: first.mony_ing || 0,
+            currentSaved: first.mony_finish || 0,
+          });
+        }
+      })
+      .catch(() => {});
   }, []);
 
   return (

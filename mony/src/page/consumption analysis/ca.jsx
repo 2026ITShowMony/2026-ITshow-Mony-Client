@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { analysis } from "../../api/index.js";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
 import BusanImg from "../../assets/ca/busan.png";
@@ -81,7 +82,7 @@ const weekBars = [
   },
 ];
 
-const fixedItems = [
+const DEFAULT_FIXED_ITEMS = [
   { title: "줄이기 어려운 소비", value: 256800, suffix: "원", meta: "12건" },
   { title: "조절 가능한 소비",   value: 171200, suffix: "원", meta: "6건"  },
 ];
@@ -109,6 +110,25 @@ const SAVEABLE_AMOUNT = 72000;
 
 export default function Ca() {
   const [caSavedAmount, setCaSavedAmount] = useState(null);
+  const [fixedItems, setFixedItems] = useState(DEFAULT_FIXED_ITEMS);
+  const [totalSpent, setTotalSpent] = useState(326000);
+
+  useEffect(() => {
+    const periodDetail = new Date().toISOString().slice(0, 7);
+    analysis.summary(periodDetail)
+      .then((res) => {
+        const d = res.data;
+        if (!d) return;
+        if (d.total > 0) setTotalSpent(d.total);
+        if (d.fixed > 0 || d.variable > 0) {
+          setFixedItems([
+            { title: "줄이기 어려운 소비", value: d.fixed,    suffix: "원", meta: "고정 지출" },
+            { title: "조절 가능한 소비",   value: d.variable, suffix: "원", meta: "변동 지출" },
+          ]);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleCaSave = (amount) => {
     const prev = Number(localStorage.getItem("mony_saved_amount") ?? 0);
@@ -221,7 +241,7 @@ export default function Ca() {
                   <div>
                     <p>3월 사용금액</p>
                     <strong className="ca-cardHeadStrong">
-                      <CountUp value={326000} suffix="원" />
+                      <CountUp value={totalSpent} suffix="원" />
                     </strong>
                   </div>
                 </div>

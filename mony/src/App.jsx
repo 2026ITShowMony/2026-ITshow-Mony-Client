@@ -9,10 +9,15 @@ import Bg from "./page/budget-goal/bg";
 import Cc from "./page/consumption-coach/cc";
 
 function App() {
+  const onboardingDone = localStorage.getItem("onboardingCompleted") === "true";
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route
+          path="/"
+          element={<Navigate to={onboardingDone ? "/home" : "/onboarding1"} replace />}
+        />
         <Route path="/home" element={<Home />} />
         <Route path="/onboarding1" element={<Onboarding1 />} />
         <Route path="/onboarding2" element={<Onboarding2 />} />

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./onboarding3.css";
 import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
+import { goals, buckets } from "../../api/index.js";
 
 const GOAL_PRESETS = [
   { label: "100,000원", value: 100000 },
@@ -26,6 +27,7 @@ export default function Onboarding3() {
   const [selectedPreset, setSelectedPreset] = useState(null);
   const [customAmount, setCustomAmount]     = useState("");
   const [savingsMethod, setSavingsMethod]   = useState(null);
+  const [isSubmitting, setIsSubmitting]     = useState(false);
 
   const goalAmount = useMemo(() => {
     if (selectedPreset === "custom") {
@@ -36,11 +38,51 @@ export default function Onboarding3() {
 
   const isValid = goalAmount >= 1000 && savingsMethod !== null;
 
-  function handleNext() {
-    if (!isValid) return;
-    localStorage.setItem("mony_savings_goal",   String(goalAmount));
-    localStorage.setItem("mony_saved_amount",    "0");
-    localStorage.setItem("mony_savings_method",  savingsMethod);
+  async function handleNext() {
+    if (!isValid || isSubmitting) return;
+    setIsSubmitting(true);
+
+    localStorage.setItem("mony_savings_goal",  String(goalAmount));
+    localStorage.setItem("mony_saved_amount",  "0");
+    localStorage.setItem("mony_savings_method", savingsMethod);
+
+    const periodDetail = new Date().toISOString().slice(0, 7);
+    const ob2 = (() => { try { return JSON.parse(localStorage.getItem("onboarding2Form") || "{}"); } catch { return {}; } })();
+    const bucketGoal = (() => { try { return JSON.parse(localStorage.getItem("bucketGoal") || "null"); } catch { return null; } })();
+
+    // 월간 예산 목표 저장
+    try {
+      await goals.create({
+        goal_type: (ob2.selectedGoals || []).join(",") || "impulse",
+        period_type: "monthly",
+        period_detail: periodDetail,
+        salary_timing: null,
+        target_amount: goalAmount,
+      });
+    } catch (e) {
+      console.warn("[onboarding] goals.create 실패:", e.message);
+    }
+
+    // 버킷리스트 목표 저장
+    if (bucketGoal?.bucketList && Array.isArray(bucketGoal.steps) && bucketGoal.steps.length === 3) {
+      try {
+        const targetAmt = Number(bucketGoal.targetAmount) || 0;
+        await buckets.create({
+          title: bucketGoal.bucketList,
+          one:   bucketGoal.steps[0].title,
+          two:   bucketGoal.steps[1].title,
+          three: bucketGoal.steps[2].title,
+          one_mony:   Math.round(targetAmt / 3),
+          two_mony:   Math.round((targetAmt / 3) * 2),
+          three_mony: targetAmt,
+          mony_ing: targetAmt,
+        });
+      } catch (e) {
+        console.warn("[onboarding] buckets.create 실패:", e.message);
+      }
+    }
+
+    localStorage.setItem("onboardingCompleted", "true");
     navigate("/home", { state: { name: userName } });
   }
 
@@ -126,11 +168,11 @@ export default function Onboarding3() {
 
         <button
           type="button"
-          disabled={!isValid}
-          className={`join1-button ${isValid ? "is-enabled" : "is-disabled"}`}
+          disabled={!isValid || isSubmitting}
+          className={`join1-button ${isValid && !isSubmitting ? "is-enabled" : "is-disabled"}`}
           onClick={handleNext}
         >
-          확인
+          {isSubmitting ? "저장 중..." : "확인"}
         </button>
       </section>
 

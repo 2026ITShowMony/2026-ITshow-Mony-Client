@@ -11,7 +11,7 @@ import BudgetGoalIcon from "../assets/menu/BudgetGoal.svg";
 import ConsumptionCoachIcon from "../assets/menu/ConsumptionCoach.svg";
 
 const MENU = [
-  { key: "home", label: "홈", icon: HomeIcon, to: "/" },
+  { key: "home", label: "홈", icon: HomeIcon, to: "/home" },
   { key: "consumption-management", label: "소비관리", icon: ConsumptionManagementIcon, to: "/consumption-management" },
   { key: "consumption-analysis", label: "소비분석", icon: ConsumptionAnalysisIcon, to: "/consumption-analysis" },
   { key: "budget-goal", label: "예산목표", icon: BudgetGoalIcon, to: "/budget-goal" },

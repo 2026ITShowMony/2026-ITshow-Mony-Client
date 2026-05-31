@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
+import { goals as goalsApi, buckets as bucketsApi } from "../../api/index.js";
 import {
   CountUp,
   ProgressFill,
@@ -136,16 +137,7 @@ function readBucketGoals() {
   }
 }
 
-// 이번 달 저축 목표
-const SAVINGS_GOAL = 100000;
-const SAVINGS_CURRENT = 62000;
-
-const savingsMilestones = [
-  { label: "25%", value: 25000 },
-  { label: "50%", value: 50000 },
-  { label: "75%", value: 75000 },
-  { label: "100%", value: 100000 },
-];
+const DEFAULT_savingsGoal = 100000;
 
 // 예산 절약 요약
 const budgetGuide = {
@@ -158,15 +150,25 @@ const budgetGuide = {
 };
 
 export default function Bg() {
-  const [savingsAmount, setSavingsAmount] = useState(SAVINGS_CURRENT);
+  const [savingsGoal, setSavingsGoal] = useState(DEFAULT_savingsGoal);
+  const [savingsAmount, setSavingsAmount] = useState(() => {
+    const stored = localStorage.getItem("mony_saved_amount");
+    return stored ? Number(stored) : 0;
+  });
   const [showSavingsModal, setShowSavingsModal] = useState(false);
   const [depositInput, setDepositInput] = useState("");
   const [toastMsg, setToastMsg] = useState(null);
   const [challengeTab, setChallengeTab] = useState("all");
   const [bucketChallenges, setBucketChallenges] = useState([]);
 
-  const savingsProgress = Math.min(savingsAmount / SAVINGS_GOAL, 1);
-  const isGoalReached = savingsAmount >= SAVINGS_GOAL;
+  const savingsProgress = savingsGoal > 0 ? Math.min(savingsAmount / savingsGoal, 1) : 0;
+  const isGoalReached = savingsGoal > 0 && savingsAmount >= savingsGoal;
+  const savingsMilestones = useMemo(() => [
+    { label: "25%", value: Math.round(savingsGoal * 0.25) },
+    { label: "50%", value: Math.round(savingsGoal * 0.5) },
+    { label: "75%", value: Math.round(savingsGoal * 0.75) },
+    { label: "100%", value: savingsGoal },
+  ], [savingsGoal]);
   const allChallenges = [...bucketChallenges, ...challengeCards].map((item) => {
     const targetAmount = Number(item.targetAmount) || 0;
     const currentAmount = Number(item.currentAmount) || 0;
@@ -204,11 +206,12 @@ export default function Bg() {
   const handleDeposit = (amount) => {
     const num = Number(amount);
     if (!num || num <= 0) return;
-    const newTotal = Math.min(savingsAmount + num, SAVINGS_GOAL);
+    const newTotal = Math.min(savingsAmount + num, savingsGoal);
     setSavingsAmount(newTotal);
+    localStorage.setItem("mony_saved_amount", String(newTotal));
     setShowSavingsModal(false);
     setDepositInput("");
-    const reached = newTotal >= SAVINGS_GOAL;
+    const reached = newTotal >= savingsGoal;
     setToastMsg(
       reached
         ? `🎉 이번 달 저축 목표 달성! 훌륭해요!`
@@ -218,7 +221,41 @@ export default function Bg() {
   };
 
   useEffect(() => {
-    setBucketChallenges(readBucketGoals());
+    // 이번 달 저축 목표 로드
+    goalsApi.getAll()
+      .then((res) => {
+        const periodDetail = new Date().toISOString().slice(0, 7);
+        const monthly = res.data?.find(
+          (g) => g.period_type === "monthly" && g.period_detail === periodDetail,
+        ) ?? res.data?.[0];
+        if (monthly?.target_amount) setSavingsGoal(monthly.target_amount);
+      })
+      .catch(() => {});
+
+    // 버킷리스트 챌린지 로드
+    bucketsApi.getAll()
+      .then((res) => {
+        if (res.data?.length > 0) {
+          const today = new Date().toLocaleDateString("ko-KR", {
+            year: "numeric", month: "numeric", day: "numeric",
+          });
+          setBucketChallenges(
+            res.data.map((b) => ({
+              id: String(b.id),
+              title: b.title,
+              targetAmount: b.mony_ing || 0,
+              currentAmount: b.mony_finish || 0,
+              status: (b.probability ?? 0) >= 100 ? "completed" : "progress",
+              completedAt: (b.probability ?? 0) >= 100 ? today : "",
+            })),
+          );
+        } else {
+          setBucketChallenges(readBucketGoals());
+        }
+      })
+      .catch(() => {
+        setBucketChallenges(readBucketGoals());
+      });
   }, []);
 
   return (
@@ -406,7 +443,7 @@ export default function Bg() {
                       </span>
                       <strong className="bg-savingsGoalTitle">
                         <CountUp value={savingsAmount} suffix="원" />
-                        <em> / {SAVINGS_GOAL.toLocaleString()}원</em>
+                        <em> / {savingsGoal.toLocaleString()}원</em>
                       </strong>
                     </div>
                     <span className="bg-savingsGoalPct">
@@ -430,7 +467,7 @@ export default function Bg() {
                             key={m.label}
                             className={`bg-savingsDot ${reached ? "is-reached" : ""}`}
                             style={{
-                              left: `${(m.value / SAVINGS_GOAL) * 100}%`,
+                              left: `${(m.value / savingsGoal) * 100}%`,
                             }}
                           >
                             <span>{m.label}</span>
@@ -630,7 +667,7 @@ export default function Bg() {
               <p>
                 목표까지{" "}
                 <strong style={{ color: "#d7ff47" }}>
-                  {(SAVINGS_GOAL - savingsAmount).toLocaleString()}원
+                  {(savingsGoal - savingsAmount).toLocaleString()}원
                 </strong>{" "}
                 남았어요
               </p>

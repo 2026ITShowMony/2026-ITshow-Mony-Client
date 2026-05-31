@@ -14,7 +14,7 @@ const buildGoals = () => [
   { key: "low_fix", title: "고정 지출 관리",     desc: "매달 나가는 돈부터 정리해보고 싶어요" },
 ];
 
-const GROQ_URL = "http://localhost:3001/api/groq";
+const GROQ_URL = "/api/groq";
 
 const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 사용자의 버킷리스트를 이루기 위한 사회 초년생 기준의 돈 모으기 계획을 만들어줘.
