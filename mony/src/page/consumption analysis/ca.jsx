@@ -108,13 +108,12 @@ const tripThumbs = [
 const SAVEABLE_AMOUNT = 72000;
 
 export default function Ca() {
-  const [caToast, setCaToast] = useState(null);
+  const [caSavedAmount, setCaSavedAmount] = useState(null);
 
   const handleCaSave = (amount) => {
     const prev = Number(localStorage.getItem("mony_saved_amount") ?? 0);
     localStorage.setItem("mony_saved_amount", String(prev + amount));
-    setCaToast(amount);
-    setTimeout(() => setCaToast(null), 2500);
+    setCaSavedAmount(amount);
   };
 
   return (
@@ -221,7 +220,7 @@ export default function Ca() {
                 <div className="ca-cardHead">
                   <div>
                     <p>3월 사용금액</p>
-                    <strong>
+                    <strong className="ca-cardHeadStrong">
                       <CountUp value={326000} suffix="원" />
                     </strong>
                   </div>
@@ -293,42 +292,73 @@ export default function Ca() {
               <div className="ca-cardHead">
                 <div>
                   <p>절약 분석</p>
-                  <strong>이번 달 저축 가능 금액</strong>
+                  <strong className="ca-savingsTitle">
+                    이번 달 저축 가능 금액 :{" "}
+                    <span>
+                      <CountUp value={SAVEABLE_AMOUNT} suffix="원" />
+                    </span>
+                  </strong>
                 </div>
-                <span className="ca-savingsCoin" aria-hidden="true">🪙</span>
               </div>
 
               <div className="ca-savingsBody">
                 <div className="ca-savingsAmounts">
-                  <div className="ca-savingsAmountRow">
+                  <div className="ca-savingsAmountCard">
+                    <i className="ca-savingsCardMark" aria-hidden="true" />
                     <span>예산 대비 절약 금액</span>
-                    <strong className="ca-savingsHighlight">
+                    <strong>
                       <CountUp value={72000} suffix="원" />
                     </strong>
+                    <small>예산보다 덜 쓴 금액</small>
                   </div>
-                  <div className="ca-savingsAmountRow">
+                  <div className="ca-savingsAmountCard">
+                    <i className="ca-savingsCardMark" aria-hidden="true" />
                     <span>지난달 대비 감소한 지출</span>
                     <strong>
                       <CountUp value={28000} suffix="원" />
                     </strong>
+                    <small>지난달 대비 절감</small>
                   </div>
-                  <div className="ca-savingsAmountRow ca-savingsAmountRow--total">
+                  <div className="ca-savingsAmountCard">
+                    <i className="ca-savingsCardMark" aria-hidden="true" />
                     <span>이번 달 저금통 적립 가능액</span>
-                    <strong className="ca-savingsHighlight">
+                    <strong>
                       <CountUp value={100000} suffix="원" />
                     </strong>
+                    <small>저금통 반영 가능</small>
                   </div>
                 </div>
 
                 <div className="ca-savingsAction">
-                  <p className="ca-savingsHint">절약한 금액을 저금통에 바로 적립해보세요</p>
+                  <div className="ca-savingsCoinArea" aria-hidden="true">
+                    <span>₩</span>
+                  </div>
                   <button
                     type="button"
                     className="ca-savingsBtn"
                     onClick={() => handleCaSave(SAVEABLE_AMOUNT)}
                   >
-                    72,000원 저금통에 적립하기
+                    72,000원 적립하기
                   </button>
+                </div>
+
+                <div
+                  className={`ca-savingsReaction ${caSavedAmount !== null ? "is-saved" : ""}`}
+                  role="status"
+                  aria-live="polite"
+                >
+                  <span className="ca-savingsReactionBadge">
+                    {caSavedAmount === null ? "대기 중" : "적립 완료"}
+                  </span>
+                  <span className="ca-savingsReactionIcon" aria-hidden="true">
+                    {caSavedAmount === null ? "·" : "✓"}
+                  </span>
+                  <strong>적립 반응</strong>
+                  <p>
+                    {caSavedAmount === null
+                      ? "아직 적립된 금액이 없어요"
+                      : `${caSavedAmount.toLocaleString()}원이 저축 저금통에 반영됐어요!`}
+                  </p>
                 </div>
               </div>
             </motion.article>
@@ -344,7 +374,6 @@ export default function Ca() {
             <motion.article className="ca-card ca-card--fixed" variants={staggerItemVariants} {...cardMotion}>
               <div className="ca-cardHead">
                 <h3>소비 구조 분석</h3>
-                <span aria-hidden="true">›</span>
               </div>
               <p className="ca-fixedConvert">
                 이번 달 조절 가능한 소비 중 <strong>42,000원</strong>을 저축으로 전환할 수 있어요.
@@ -389,7 +418,7 @@ export default function Ca() {
                   <h3>소비 기록에서 찾은 저축 기회</h3>
                   <strong>지출 기록 · 여행 / 기타</strong>
                 </div>
-                <span aria-hidden="true">›</span>
+                {/* <span aria-hidden="true">›</span> */}
               </div>
 
               <div className="ca-tripCards">
@@ -422,11 +451,6 @@ export default function Ca() {
             </motion.article>
           </motion.section>
 
-          {caToast !== null && (
-            <div className="ca-savingsToast" role="status" aria-live="polite">
-              🪙 {caToast.toLocaleString()}원이 저축 저금통에 반영됐어요!
-            </div>
-          )}
         </section>
       </div>
     </main>

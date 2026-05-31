@@ -49,8 +49,12 @@
 .ca-cardHead {
   min-height: 34px;
   margin: 0;
-  padding: 0;
+  padding: 10px 10px 32px;
   align-items: center;
+}
+
+.ca-cardHeadStrong{
+  margin-top:10px;
 }
 
 .ca-travelHead {
@@ -65,7 +69,7 @@
 }
 
 .ca-toolbar {
-  padding: 2px 4px 16px;
+  padding: 25px 25px 32px;
   color: rgba(255, 255, 255, 0.92);
   font-size: 14px;
   font-weight: 600;
@@ -111,10 +115,12 @@
   line-height: 1.35;
 }
 
-.ca-cardHead p,
-.ca-cardHead strong,
-.ca-cardHead h3 {
-  margin: 0;
+.ca-cardHead h3{
+  margin: 12px 20px 0px 0;
+}
+
+.ca-card--fixed .ca-cardHead {
+  padding-bottom: 0;
 }
 
 .ca-cardHead strong,
@@ -137,6 +143,7 @@
 }
 
 .ca-progressPair {
+  padding: 0px 32px 32px;
   margin-top: 12px;
   display: flex;
   flex-direction: column;
@@ -252,8 +259,8 @@
 .ca-weekChart {
   position: relative;
   height: 274px;
-  margin-top: 12px;
-  padding: 34px 0 34px 32px;
+  margin-top: 30px;
+  padding: 50px 0 34px 32px;
 }
 
 .ca-weekScale {
@@ -441,6 +448,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 6px;
+  margin: 5px 0 0 5px;
 }
 
 .ca-fixedRow strong {
@@ -495,6 +503,7 @@
 .ca-fixedCardFoot small,
 .ca-fixedCardFoot span {
   color: rgba(255, 255, 255, 0.58);
+  font-weight: 200;
 }
 
 .ca-tripCards {
@@ -553,7 +562,8 @@
 /* ── 저축 인사이트 (상단 분석 카드 내) ── */
 .ca-savingsInsight {
   margin-top: 14px;
-  padding: 12px 14px;
+  /* padding: 12px 14px; */
+  padding: 32px 32px 32px;
   border-radius: 14px;
   background: rgba(215, 255, 71, 0.04);
   border: 1px solid rgba(215, 255, 71, 0.1);
@@ -594,7 +604,7 @@
 
 /* ── 조절 가능 소비 전환 문구 ── */
 .ca-fixedConvert {
-  margin: 12px 0 0;
+  margin: 12px 10px 20px 10px;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.58);
   line-height: 1.6;
@@ -643,118 +653,287 @@
 
 /* ── 저축 가능 금액 카드 ── */
 .ca-card--savings {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 30px;
+  padding: 32px;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(215, 255, 71, 0.13), transparent 30%),
+    radial-gradient(circle at 18% 84%, rgba(255, 255, 255, 0.045), transparent 34%),
+    linear-gradient(135deg, #181818 0%, #111 55%, #191f10 100%);
+  border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.ca-savingsCoin {
-  font-size: 26px;
-  line-height: 1;
+.ca-card--savings::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.07), transparent 28%, transparent 72%, rgba(215, 255, 71, 0.06));
+  opacity: 0.42;
 }
 
-.ca-savingsBody {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: center;
+.ca-card--savings .ca-cardHead {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  min-height: auto;
 }
 
-.ca-savingsAmounts {
+.ca-card--savings .ca-cardHead > div {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.ca-savingsAmountRow {
+.ca-savingsTitle {
   display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.ca-savingsTitle span {
+  color: #d7ff47;
+  font-size: 19px;
+  text-shadow: 0 0 18px rgba(215, 255, 71, 0.22);
+}
+
+.ca-savingsBody {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px 252px;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ca-savingsAmounts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.ca-savingsAmountCard {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 166px;
+  aspect-ratio: 1 / 0.96;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 11px 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  justify-content: center;
+  gap: 12px;
+  padding: 22px 18px 20px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.026)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(215, 255, 71, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 26px rgba(0, 0, 0, 0.16);
+  text-align: center;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
-.ca-savingsAmountRow--total {
-  background: rgba(215, 255, 71, 0.05);
-  border-color: rgba(215, 255, 71, 0.12);
+.ca-savingsAmountCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(215, 255, 71, 0.52);
+  background:
+    linear-gradient(180deg, rgba(215, 255, 71, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24), 0 0 22px rgba(215, 255, 71, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.ca-savingsAmountRow span {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.62);
+.ca-savingsCardMark {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: block;
+  background:
+    radial-gradient(circle at 35% 30%, #f3ffb4, #d7ff47 46%, #8fac16 100%);
+  box-shadow: 0 0 18px rgba(215, 255, 71, 0.22), inset 0 -4px 8px rgba(0, 0, 0, 0.22);
 }
 
-.ca-savingsAmountRow strong {
-  font-size: 15px;
+.ca-savingsAmountCard span {
+  max-width: 132px;
+  font-size: 14px;
+  font-weight: 700;
   color: rgba(255, 255, 255, 0.92);
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.ca-savingsAmountCard strong {
+  font-size: 20px;
+  color: #f7f7f7;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.ca-savingsHighlight {
-  color: #d7ff47 !important;
+.ca-savingsAmountCard small {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 11px;
+  line-height: 1.35;
+  word-break: keep-all;
 }
 
 .ca-savingsAction {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  min-width: 180px;
+  justify-content: center;
+  gap: 18px;
+  min-width: 0;
 }
 
-.ca-savingsHint {
-  margin: 0;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  text-align: center;
-  line-height: 1.5;
+.ca-savingsCoinArea {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.96), transparent 24%),
+    radial-gradient(circle at 70% 74%, rgba(215, 255, 71, 0.24), transparent 28%),
+    linear-gradient(145deg, #f6f8ef 0%, #c9d0c3 43%, #7b8374 100%);
+  box-shadow:
+    0 20px 38px rgba(0, 0, 0, 0.38),
+    0 0 34px rgba(215, 255, 71, 0.12),
+    inset 0 5px 12px rgba(255, 255, 255, 0.7),
+    inset 0 -12px 22px rgba(0, 0, 0, 0.24);
+}
+
+.ca-savingsCoinArea::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  box-shadow: inset 0 0 0 7px rgba(255, 255, 255, 0.16);
+}
+
+.ca-savingsCoinArea span {
+  position: relative;
+  color: #2d331e;
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .ca-savingsBtn {
-  width: 100%;
-  padding: 11px 18px;
-  border-radius: 14px;
-  border: none;
+  min-width: 160px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 999px;
   background: #d7ff47;
-  color: #0f0f0f;
+  color: #111;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   white-space: nowrap;
-  transition: opacity 120ms ease, transform 120ms ease;
+  box-shadow: 0 10px 22px rgba(215, 255, 71, 0.16);
+  transition: filter 140ms ease, transform 140ms ease, box-shadow 140ms ease;
   font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+.ca-savingsBtn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 14px 28px rgba(215, 255, 71, 0.24);
+  transform: translateY(-2px);
+}
+
 .ca-savingsBtn:active {
-  opacity: 0.88;
-  transform: translateY(1px);
+  transform: translateY(0);
 }
 
-.ca-savingsToast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 22px;
-  border-radius: 14px;
-  background: rgba(22, 22, 22, 0.97);
-  border: 1px solid rgba(215, 255, 71, 0.3);
+.ca-savingsReaction {
+  position: relative;
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 26px 22px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 32px rgba(0, 0, 0, 0.18);
+  text-align: center;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.ca-savingsReaction.is-saved {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(215, 255, 71, 0.13), transparent 38%),
+    linear-gradient(180deg, rgba(215, 255, 71, 0.06), rgba(255, 255, 255, 0.026)),
+    rgba(255, 255, 255, 0.04);
+  border-color: rgba(215, 255, 71, 0.36);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22), 0 0 26px rgba(215, 255, 71, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ca-savingsReactionBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.065);
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ca-savingsReaction.is-saved .ca-savingsReactionBadge {
+  background: rgba(215, 255, 71, 0.16);
   color: #d7ff47;
-  font-size: 13px;
-  font-weight: 600;
-  z-index: 200;
-  white-space: nowrap;
-  animation: caSavingsIn 0.3s ease;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes caSavingsIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+.ca-savingsReactionIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ca-savingsReaction.is-saved .ca-savingsReactionIcon {
+  background: #d7ff47;
+  color: #111;
+  box-shadow: 0 0 18px rgba(215, 255, 71, 0.28);
+}
+
+.ca-savingsReaction strong {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 15px;
+}
+
+.ca-savingsReaction p {
+  max-width: 178px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: keep-all;
 }
 
 @media (max-width: 1200px) {
@@ -762,9 +941,21 @@
     grid-template-columns: 1fr;
   }
 
+  .ca-savingsAmounts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .ca-savingsAction {
-    min-width: auto;
-    align-items: flex-start;
+    min-width: 0;
+    padding: 10px 0 2px;
+  }
+
+  .ca-savingsReaction {
+    min-height: 132px;
+  }
+
+  .ca-savingsBtn {
+    min-width: 220px;
   }
 }
 
@@ -795,8 +986,37 @@
   .ca-miniGrid,
   .ca-fixedSummary,
   .ca-fixedGrid,
+  .ca-savingsAmounts,
   .ca-tripCards,
   .ca-tripThumbs {
     grid-template-columns: 1fr;
+  }
+
+  .ca-card--savings {
+    gap: 24px;
+    padding: 24px 20px;
+  }
+
+  .ca-savingsAmountCard {
+    min-height: 142px;
+    aspect-ratio: auto;
+  }
+
+  .ca-savingsCoinArea {
+    width: 112px;
+    height: 112px;
+  }
+
+  .ca-savingsCoinArea span {
+    font-size: 44px;
+  }
+
+  .ca-savingsBtn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ca-savingsReaction {
+    padding: 56px 18px 24px;
   }
 }
