@@ -368,7 +368,7 @@ export default function Home() {
     bucketsApi
       .getAll()
       .then((res) => {
-        const list = Array.isArray(res.data) ? res.data : [];
+        const list= Array.isArray(res.data) ? res.data : [];
 
         const target = list.find((b) => (b.probability ?? 0) < 100) ?? list[0];
         if (target) {
