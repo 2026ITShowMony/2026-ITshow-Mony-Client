@@ -351,8 +351,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    setBucketGoal(getBucketGoal());
-
     const periodDetail = new Date().toISOString().slice(0, 7);
 
     goalsApi
@@ -370,16 +368,27 @@ export default function Home() {
     bucketsApi
       .getAll()
       .then((res) => {
-        const first = res.data?.[0];
-        if (first) {
+        const list = Array.isArray(res.data) ? res.data : [];
+
+        const target = list.find((b) => (b.probability ?? 0) < 100) ?? list[0];
+        if (target) {
           setBucketGoal({
-            bucketList: first.title,
-            targetAmount: first.mony_ing || 0,
-            currentSaved: first.mony_finish || 0,
+            bucketList: target.title,
+            targetAmount: target.mony_ing || 0,
+            currentSaved: target.mony_finish || 0,
+            monthlySaving: target.monthly_saving ?? 0,
+            estimatedPeriod: target.estimated_period ?? "",
+            steps: target.steps ?? [],
           });
+          localStorage.setItem("mony_primary_bucket_id", String(target.id));
+        } else {
+          setBucketGoal(null);
+          localStorage.removeItem("bucketGoal");
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setBucketGoal(null);
+      });
   }, []);
 
   return (
@@ -831,7 +840,7 @@ export default function Home() {
                   {benefitRows.map((row) => (
                     <div key={row.cardName} className="home-benefitRow">
                       <div className="home-benefitMain">
-                        <strong >
+                        <strong>
                           {benefitCardInView ? (
                             <CountUp
                               value={parseMoney(row.amount)}
