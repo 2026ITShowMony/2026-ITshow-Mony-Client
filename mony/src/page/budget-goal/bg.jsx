@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
-import MonthlyBudgetGoalCard from "../../component/MonthlyBudgetGoalCard";
 import { goals as goalsApi, buckets as bucketsApi } from "../../api/index.js";
 import {
   CountUp,
@@ -220,27 +219,34 @@ export default function Bg() {
     setShowSavingsModal(false);
     setDepositInput("");
 
-    const primary = bucketChallenges.find((b) => b.status !== "completed");
+    const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+    const primary =
+      bucketChallenges.find((b) => String(b.id) === primaryBucketId) ??
+      bucketChallenges.find((b) => b.status !== "completed");
     if (primary?.id) {
-      const newMonyFinish = Math.min(
-        primary.currentAmount + num,
-        primary.targetAmount,
-      );
       bucketsApi
-        .updateMoney(primary.id, newMonyFinish)
-        .then(() => {
+        .deposit(primary.id, num)
+        .then((res) => {
+          const updatedBucket = res.data;
+          const newMonyFinish = Number(updatedBucket?.mony_finish ?? primary.currentAmount + num);
+          const targetAmount = Number(updatedBucket?.mony_ing ?? primary.targetAmount);
+          localStorage.setItem("mony_primary_bucket_id", String(updatedBucket?.id ?? primary.id));
+          localStorage.setItem("mony_saved_amount", String(newMonyFinish));
+          setSavingsAmount(newMonyFinish);
+          if (targetAmount > 0) setSavingsGoal(targetAmount);
           setBucketChallenges((prev) =>
             prev.map((b) =>
               b.id === primary.id
                 ? {
                     ...b,
+                    targetAmount,
                     currentAmount: newMonyFinish,
-                    progress: primary.targetAmount
-                      ? newMonyFinish / primary.targetAmount
+                    progress: targetAmount
+                      ? newMonyFinish / targetAmount
                       : 0,
                     status:
-                      newMonyFinish >= primary.targetAmount &&
-                      primary.targetAmount > 0
+                      newMonyFinish >= targetAmount &&
+                      targetAmount > 0
                         ? "completed"
                         : "progress",
                   }
@@ -283,6 +289,17 @@ export default function Bg() {
             month: "numeric",
             day: "numeric",
           });
+          const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+          const primaryBucket =
+            res.data.find((b) => String(b.id) === primaryBucketId) ?? res.data[0];
+          if (primaryBucket) {
+            const currentSaved = primaryBucket.mony_finish || 0;
+            const targetAmount = primaryBucket.mony_ing || 0;
+            localStorage.setItem("mony_primary_bucket_id", String(primaryBucket.id));
+            localStorage.setItem("mony_saved_amount", String(currentSaved));
+            setSavingsAmount(currentSaved);
+            if (targetAmount > 0) setSavingsGoal(targetAmount);
+          }
           setBucketChallenges(
             res.data.map((b) => ({
               id: String(b.id),
@@ -388,113 +405,6 @@ export default function Bg() {
                       <img src={bgCh1} alt="캐릭터" />
                     </div>
                   </div>
-                </div>
-              </motion.article>
-
-              {/* ── 이번달 예산목표 ── */}
-              <motion.article
-                className="bg-card bg-card--goal"
-                variants={staggerItemVariants}
-                {...cardMotion}
-              >
-                <MonthlyBudgetGoalCard
-                  name={name}
-                  avatarSrc={bgCh2}
-                  items={milestoneItems}
-                />
-              </motion.article>
-            </motion.div>
-
-            <motion.div
-              className="bg-gridBottom"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.18 }}
-            >
-              {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
-              <motion.article
-                className="bg-card bg-card--guide"
-                variants={staggerItemVariants}
-                {...cardMotion}
-              >
-                <div className="bg-cardHead">
-                  <h3>예산 가이드</h3>
-                  <span aria-hidden="true">›</span>
-                </div>
-
-                <div className="bg-guideGrid">
-                  <div className="bg-guideSummary">
-                    <div>
-                      <strong>3월 30일 | 남은 기간 1일</strong>
-                      <p>4월이 되기 전 예산을 정리해요</p>
-                    </div>
-                    <strong className="bg-guideAmount">
-                      <CountUp value={122200} suffix="원" />
-                    </strong>
-                  </div>
-
-                  <div className="bg-guidePlan">
-                    <strong>예산 제안</strong>
-                    <p>! 식비를 20% 줄이면 예산 내 유지 가능</p>
-                    <p>! 쇼핑 지출을 절반으로 줄이면 안정</p>
-                  </div>
-                </div>
-
-                {/* ── 이번 달 저축 목표 ── */}
-                <div className="bg-savingsGoal">
-                  <div className="bg-savingsGoalHeader">
-                    <div>
-                      <span className="bg-savingsGoalLabel">
-                        이번 달 저축 목표
-                      </span>
-                      <strong className="bg-savingsGoalTitle">
-                        <CountUp value={savingsAmount} suffix="원" />
-                        <em> / {savingsGoal.toLocaleString()}원</em>
-                      </strong>
-                    </div>
-                    <span className="bg-savingsGoalPct">
-                      {Math.round(savingsProgress * 100)}%
-                    </span>
-                  </div>
-
-                  <div className="bg-savingsTrackWrap">
-                    <div className="bg-savingsTrack">
-                      <ProgressFill
-                        className="bg-progressFill is-lime"
-                        value={savingsProgress}
-                      />
-                    </div>
-                    <div className="bg-savingsMilestones">
-                      {savingsMilestones.map((m) => {
-                        const reached = savingsAmount >= m.value;
-                        return (
-                          <div
-                            key={m.label}
-                            className={`bg-savingsDot ${reached ? "is-reached" : ""}`}
-                            style={{
-                              left: `${(m.value / savingsGoal) * 100}%`,
-                            }}
-                          >
-                            <span>{m.label}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {isGoalReached ? (
-                    <div className="bg-savingsComplete">
-                      🎉 이번 달 저축 목표 달성!
-                    </div>
-                  ) : (
-                    <button
-                      className="bg-savingsBtn"
-                      onClick={() => setShowSavingsModal(true)}
-                    >
-                      + 저축 적립하기
-                    </button>
-                  )}
                 </div>
               </motion.article>
 
@@ -646,6 +556,101 @@ export default function Bg() {
                   ))}
                 </div>
               </motion.article>
+            </motion.div>
+
+            <motion.div
+              className="bg-gridBottom"
+              variants={staggerContainerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.18 }}
+            >
+              {/* ── 예산 가이드 + 이번 달 저축 목표 ── */}
+              <motion.article
+                className="bg-card bg-card--guide"
+                variants={staggerItemVariants}
+                {...cardMotion}
+              >
+                <div className="bg-cardHead">
+                  <h3>예산 가이드</h3>
+                  <span aria-hidden="true">›</span>
+                </div>
+
+                <div className="bg-guideGrid">
+                  <div className="bg-guideSummary">
+                    <div>
+                      <strong>3월 30일 | 남은 기간 1일</strong>
+                      <p>4월이 되기 전 예산을 정리해요</p>
+                    </div>
+                    <strong className="bg-guideAmount">
+                      <CountUp value={122200} suffix="원" />
+                    </strong>
+                  </div>
+
+                  <div className="bg-guidePlan">
+                    <strong>예산 제안</strong>
+                    <p>! 식비를 20% 줄이면 예산 내 유지 가능</p>
+                    <p>! 쇼핑 지출을 절반으로 줄이면 안정</p>
+                  </div>
+                </div>
+
+                {/* ── 이번 달 저축 목표 ── */}
+                <div className="bg-savingsGoal">
+                  <div className="bg-savingsGoalHeader">
+                    <div>
+                      <span className="bg-savingsGoalLabel">
+                        이번 달 저축 목표
+                      </span>
+                      <strong className="bg-savingsGoalTitle">
+                        <CountUp value={savingsAmount} suffix="원" />
+                        <em> / {savingsGoal.toLocaleString()}원</em>
+                      </strong>
+                    </div>
+                    <span className="bg-savingsGoalPct">
+                      {Math.round(savingsProgress * 100)}%
+                    </span>
+                  </div>
+
+                  <div className="bg-savingsTrackWrap">
+                    <div className="bg-savingsTrack">
+                      <ProgressFill
+                        className="bg-progressFill is-lime"
+                        value={savingsProgress}
+                      />
+                    </div>
+                    <div className="bg-savingsMilestones">
+                      {savingsMilestones.map((m) => {
+                        const reached = savingsAmount >= m.value;
+                        return (
+                          <div
+                            key={m.label}
+                            className={`bg-savingsDot ${reached ? "is-reached" : ""}`}
+                            style={{
+                              left: `${(m.value / savingsGoal) * 100}%`,
+                            }}
+                          >
+                            <span>{m.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {isGoalReached ? (
+                    <div className="bg-savingsComplete">
+                      🎉 이번 달 저축 목표 달성!
+                    </div>
+                  ) : (
+                    <button
+                      className="bg-savingsBtn"
+                      onClick={() => setShowSavingsModal(true)}
+                    >
+                      + 저축 적립하기
+                    </button>
+                  )}
+                </div>
+              </motion.article>
+
             </motion.div>
           </motion.section>
         </section>
