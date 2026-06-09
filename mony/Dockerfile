@@ -11,8 +11,8 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN sed -i 's/listen\s*80;/listen 3002;/g' /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 3002
 
 CMD ["nginx", "-g", "daemon off;"]
