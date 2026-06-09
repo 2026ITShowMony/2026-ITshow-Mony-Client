@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3002/api';
+const BASE_URL = '/api';
 
 function getUserId() {
   const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -51,7 +51,6 @@ export const buckets = {
   getById: (id) => request(`/buckets/${id}`),
   getStatus: () => request('/buckets/status/all'),
   updateMoney: (id, mony_finish) => request(`/buckets/${id}/money`, { method: 'PATCH', body: JSON.stringify({ mony_finish }) }),
-  deposit: (id, amount) => request(`/buckets/${id}/deposit`, { method: 'PATCH', body: JSON.stringify({ amount }) }),
   updateProbability: (id, body) => request(`/buckets/${id}/probability`, { method: 'PATCH', body: JSON.stringify(body) }),
   setDoing: (id) => request(`/buckets/${id}/doing`, { method: 'POST' }),
   remove: (id) => request(`/buckets/${id}`, { method: 'DELETE' }),
