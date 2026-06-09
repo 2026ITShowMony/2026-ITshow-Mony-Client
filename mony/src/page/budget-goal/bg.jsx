@@ -252,7 +252,7 @@ export default function Bg() {
       bucketChallenges.find((b) => b.status !== "completed");
     if (primary?.id) {
       bucketsApi
-        .deposit(primary.id, num)
+        .updateMoney(primary.id, primary.currentAmount + num)
         .then((res) => {
           const updatedBucket = res.data;
           const newMonyFinish = Number(updatedBucket?.mony_finish ?? primary.currentAmount + num);
