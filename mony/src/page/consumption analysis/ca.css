@@ -653,27 +653,19 @@
 
 /* ── 저축 가능 금액 카드 ── */
 .ca-card--savings {
-  position: relative;
-  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  gap: 30px;
-  padding: 32px;
-  background:
-    radial-gradient(circle at 82% 18%, rgba(215, 255, 71, 0.13), transparent 30%),
-    radial-gradient(circle at 18% 84%, rgba(255, 255, 255, 0.045), transparent 34%),
-    linear-gradient(135deg, #181818 0%, #111 55%, #191f10 100%);
-  border-color: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  flex-direction: row;
+  align-items: stretch;
+  gap: 20px;
+  padding: 32.779px 32px 32.221px 32px;
+  background: #1c1c1c;
+  overflow: visible;
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
 }
 
 .ca-card--savings::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.07), transparent 28%, transparent 72%, rgba(215, 255, 71, 0.06));
-  opacity: 0.42;
+  display: none;
 }
 
 .ca-card--savings .ca-cardHead {
@@ -1615,6 +1607,430 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+}
+/* ── 좌측 영역 */
+.ca-sv__left {
+  flex: 0 1 55%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 상단 둥근 박스: 총금액(좌) + 통계3개(우) */
+.ca-sv__topBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px !important;
+  padding: 20px !important;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ca-sv__totalBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ca-sv__totalLabel {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ca-sv__totalAmount {
+  color: #CDFF4E;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.ca-sv__statsRow {
+  text-align: left;
+  display: flex;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.ca-sv__stat {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+}
+
+.ca-sv__stat span {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ca-sv__stat strong {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* 하단 카드 3개 가로 배열 */
+.ca-sv__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ca-sv__card {
+  padding: 28px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ca-sv__cardLabel {
+  white-space: pre-line; /* \n 줄바꿈 처리 */
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  line-height: 22px; /* 137.5% */
+}
+
+.testtest{
+  align-self: stretch;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.ca-sv__cardSub {
+  margin-top: 90px;
+  align-self: stretch;
+
+  color: #B6B6B6;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 157.143% */
+  text-align: right;
+}
+
+.ca-sv__cardAmount {
+  color: #CDFF4E;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 29px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px; /* 68.75% */
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 우측 영역 */
+.ca-sv__right {
+  flex-shrink: 0;
+  width: 500px;
+  flex-direction: row;
+  border: none;
+
+  display: flex;
+  height: 347px;
+  padding: 60.576px 31.695px 61px 32px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  border-radius: 18px;
+  background: #222;
+}
+
+.ca-sv__body {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.ca-sv__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* 코인 + 버튼 수직 묶음 */
+.ca-sv__coinWrap {
+  display: flex;
+  flex-shrink: 0;
+
+  display: flex;
+  width: 164px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.ca-sv__coin {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.96), transparent 24%),
+    radial-gradient(circle at 70% 74%, rgba(215, 255, 71, 0.24), transparent 28%),
+    linear-gradient(145deg, #f6f8ef 0%, #c9d0c3 43%, #7b8374 100%);
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.38),
+    inset 0 4px 10px rgba(255, 255, 255, 0.7),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.24);
+}
+
+
+.ca-sv__depositBtn {
+  width: 100%;
+  max-width: 190px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.5;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.90);
+  color: #111;
+  display: flex;
+  padding: 10px 8px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.ca-sv__depositBtn:hover {
+  background: rgba(255, 255, 255, 0.90);
+  border-color: rgba(254, 255, 251, 0.6);
+  transform: translateY(-1px);
+}
+
+/* 초록 반응 박스 */
+.ca-sv__reaction {
+  display: flex;
+  height: 255px;
+  padding: 21px 32px;
+  align-items: flex-start;
+  gap: 5px;
+  border-radius: 18px;
+  border: 1px solid rgba(189, 235, 73, 0.42);
+  background: linear-gradient(180deg, #BDD879 0%, #3A4916 100%);
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ca-sv__reaction.is-saved {
+  border-radius: 18px;
+  border: 1px solid rgba(189, 235, 73, 0.42);
+  background: linear-gradient(180deg, #BDD879 0%, #3A4916 100%);
+}
+
+.ca-sv__reactionTop {
+  top: 14px;
+  right: 14px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  width: auto;
+  padding: 10px 10px;
+}
+
+.ca-sv__reactionChar {
+  display: flex;
+  width: 71.172px;
+  padding: 10.705px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 7.137px;
+  border-radius: 89.208px;
+  border: 0.892px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.32);
+
+  /* position: static;
+  margin: 0;
+  object-fit: contain;
+  box-sizing: border-box; */
+}
+
+.ca-sv__reactionBadge {
+  /* position: static;
+  margin: 0; */
+
+  display: flex;
+  padding: 4px 14px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(189, 235, 73, 0.17);
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 183.333% */
+}
+
+.ca-sv__reactionTime {
+  color: rgba(255, 255, 255, 0.44);
+  font-family: Pretendard;
+  font-size: 11px;
+  font-style: normal;
+  margin-top: 0;
+  font-weight: 400;
+  line-height: 22px; /* 183.333% */
+}
+
+.ca-sv__reactionMsg {
+  margin: 0;
+  word-break: keep-all;
+
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22px; /* 157.143% */
+}
+
+.ca-sv__reactionMsg strong {
+  color: #fff;
+  display: inline;
+  font-weight: 700;
+}
+
+.ca-sv__reaction.is-saved {
+  background: #3d4f1e;
+}
+
+.ca-sv__reaction:not(.is-saved) .ca-sv__reactionBadge {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ca-sv__reactionTime {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+
+/* ══ 카테고리 탭 (달성 버킷 섹션) ══ */
+.ca-mc__tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 4px 0 8px;
+}
+
+.ca-mc__tab {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: all 140ms;
+}
+
+.ca-mc__tab:hover {
+  border-color: rgba(215, 255, 71, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ca-mc__tab.is-active {
+  background: rgba(215, 255, 71, 0.12);
+  border-color: rgba(215, 255, 71, 0.35);
+  color: #d7ff47;
+}
+
+/* 사진 호버 오버레이 */
+.ca-mc__photoHoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 150ms;
+  border-radius: 11px;
+}
+
+.ca-mc:hover .ca-mc__photoHoverOverlay {
+  opacity: 1;
+}
+
+.ca-mc__photoHoverOverlay span {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+/* 모달 버킷 제목 */
+.ca-modal__headLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ca-modal__bucketTitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── 반응형 */
+@media (max-width: 1100px) {
+  .ca-card--savings {
+    flex-direction: column !important;
+  }
+  .ca-sv__right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .ca-sv__cards {
+    grid-template-columns: 1fr;
+  }
+  .ca-sv__statsRow {
+    gap: 12px;
+  }
 }
 
 /* ── 반응형 */
