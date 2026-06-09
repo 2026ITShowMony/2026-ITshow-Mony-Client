@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { goals as goalsApi, buckets as bucketsApi, analysis } from "../../api/index.js";
 import Menu from "../../component/menu";
 import HomeHeader from "../../component/homeheader";
-import charSvg from "../../assets/home/char.svg";
+import charSvg from "../../assets/home/bg_ch1.png";
 import {
   cardMotion,
   Reveal,
