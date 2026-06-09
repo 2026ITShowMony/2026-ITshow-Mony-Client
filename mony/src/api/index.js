@@ -50,6 +50,7 @@ export const buckets = {
   getAll: () => request('/buckets'),
   getById: (id) => request(`/buckets/${id}`),
   getStatus: () => request('/buckets/status/all'),
+  deposit: (id, amount) => request(`/buckets/${id}/deposit`, { method: 'PATCH', body: JSON.stringify({ amount }) }),
   updateMoney: (id, mony_finish) => request(`/buckets/${id}/money`, { method: 'PATCH', body: JSON.stringify({ mony_finish }) }),
   updateProbability: (id, body) => request(`/buckets/${id}/probability`, { method: 'PATCH', body: JSON.stringify(body) }),
   setDoing: (id) => request(`/buckets/${id}/doing`, { method: 'POST' }),
