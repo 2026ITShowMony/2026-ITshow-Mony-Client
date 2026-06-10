@@ -6,7 +6,9 @@ import JoinStarIcon from "../../component/JoinStarIcon";
 
 export default function Onboarding1() {
   const navigate = useNavigate();
-  const [name, setName] = useState(() => localStorage.getItem("joinName") ?? "");
+  const [name, setName] = useState(
+    () => localStorage.getItem("joinName") ?? "",
+  );
 
   const isValid = useMemo(() => {
     const trimmed = name.trim();
@@ -47,13 +49,22 @@ export default function Onboarding1() {
             name="join-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && isValid) {
+                const trimmed = name.trim();
+                localStorage.setItem("joinName", trimmed);
+                navigate("/onboarding2", { state: { name: trimmed } });
+              }
+            }}
             placeholder="최대 20자"
             maxLength={20}
             autoComplete="nickname"
             className="join1-input"
           />
 
-          <p className="join1-helper">입력한 이름 · 닉네임으로 기록이 저장돼요</p>
+          <p className="join1-helper">
+            입력한 이름 · 닉네임으로 기록이 저장돼요
+          </p>
 
           <button
             type="button"
