@@ -228,7 +228,7 @@ export default function CC() {
       groqHistory.current = [
         ...groqHistory.current,
         { role: "user", parts: [{ text: content }] },
-        { role: "model", parts: [{ text: replyText }] },
+        { role: "assistant", parts: [{ text: replyText }] },
       ];
 
       setMessages((prev) =>
