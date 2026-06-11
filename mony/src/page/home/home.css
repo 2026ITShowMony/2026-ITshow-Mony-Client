@@ -1057,16 +1057,6 @@
 
 .home-savingsProgressTrack.is-running .coin-run {
   left: clamp(14px, calc(var(--savings-progress) * 100%), calc(100% - 14px));
-  animation: homeCoinRunIn 1.15s cubic-bezier(0.25, 0.1, 0.25, 1) both;
-}
-
-@keyframes homeCoinRunIn {
-  from {
-    left: 14px;
-  }
-  to {
-    left: clamp(14px, calc(var(--savings-progress) * 100%), calc(100% - 14px));
-  }
 }
 
 .home-savingsActions {
