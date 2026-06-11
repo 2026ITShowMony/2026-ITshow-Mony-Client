@@ -6,12 +6,36 @@ import Navigate from "../../component/navigate";
 import JoinStarIcon from "../../component/JoinStarIcon";
 
 const buildGoals = () => [
-  { key: "impulse", title: "충동구매 줄이기",    desc: "필요한 것만 사고, 즉흥 구매는 줄일래요" },
-  { key: "fix",     title: "소소한 지출 관리",   desc: "배달 음식 등 작은 소비를 줄이고 싶어요" },
-  { key: "balance", title: "균형 있는 소비",     desc: "소비와 저축의 균형을 맞추고 싶어요" },
-  { key: "plan",    title: "계획적인 소비",      desc: "소비 기준을 정해두고 쓰고 싶어요" },
-  { key: "saving",  title: "저축 습관 만들기",   desc: "꾸준한 저축으로 금융 습관을 만들고 싶어요" },
-  { key: "low_fix", title: "고정 지출 관리",     desc: "매달 나가는 돈부터 정리해보고 싶어요" },
+  {
+    key: "impulse",
+    title: "충동구매 줄이기",
+    desc: "필요한 것만 사고, 즉흥 구매는 줄일래요",
+  },
+  {
+    key: "fix",
+    title: "소소한 지출 관리",
+    desc: "배달 음식 등 작은 소비를 줄이고 싶어요",
+  },
+  {
+    key: "balance",
+    title: "균형 있는 소비",
+    desc: "소비와 저축의 균형을 맞추고 싶어요",
+  },
+  {
+    key: "plan",
+    title: "계획적인 소비",
+    desc: "소비 기준을 정해두고 쓰고 싶어요",
+  },
+  {
+    key: "saving",
+    title: "저축 습관 만들기",
+    desc: "꾸준한 저축으로 금융 습관을 만들고 싶어요",
+  },
+  {
+    key: "low_fix",
+    title: "고정 지출 관리",
+    desc: "매달 나가는 돈부터 정리해보고 싶어요",
+  },
 ];
 
 const GROQ_URL = "/api/groq";
@@ -56,7 +80,7 @@ const SAVINGS_PLAN_PROMPT = `당신은 MONY 앱의 저축 플래너입니다.
 - 예: 집 사기라면 초기 자금 약 3,000만 원 ~ 5,000만 원, 월 50만 원 ~ 100만 원, 약 3년 ~ 5년처럼 작성하세요.
 
 규칙:
-1. 한국어로만 답변하세요. 한문, 일본어, 영어등 다른 언어는 절대 사용하지 마세요.
+1. 한국어로만 답변하세요. 한문, 일본어, 영어등 다른 언어는 절대 사용하지 마세요. 다른나라 단어도 그냥 한국어로 해석해서 한국어만 작성하세요.
 2. 버킷리스트 준비 과정이 아니라 저축 방법, 소비 줄이기, 목표 금액 달성 계획 중심으로 작성하세요.
 3. 정확히 3단계만 작성하세요.
 4. 각 단계는 짧은 제목과 1~2문장 설명으로 작성하세요.
@@ -76,15 +100,18 @@ const BUCKET_CATEGORIES = ["여행", "취미", "자기계발"];
 const fallbackSavingsPlan = [
   {
     title: "1단계: 목표 금액 정하기",
-    description: "버킷리스트 달성을 위한 목표 금액을 약 300만 원으로 정하고 필요한 금액을 먼저 확인해요.",
+    description:
+      "버킷리스트 달성을 위한 목표 금액을 약 300만 원으로 정하고 필요한 금액을 먼저 확인해요.",
   },
   {
     title: "2단계: 월 저축 금액 정하기",
-    description: "사회 초년생 기준으로 매월 약 30만 원씩 월급일에 먼저 저축하는 계획을 세워요.",
+    description:
+      "사회 초년생 기준으로 매월 약 30만 원씩 월급일에 먼저 저축하는 계획을 세워요.",
   },
   {
     title: "3단계: 저축 기간과 소비 관리하기",
-    description: "약 10개월 동안 외식비와 쇼핑비를 월 5만 원씩 줄여 목표 금액에 가까워져요.",
+    description:
+      "약 10개월 동안 외식비와 쇼핑비를 월 5만 원씩 줄여 목표 금액에 가까워져요.",
   },
 ];
 
@@ -111,12 +138,15 @@ const hasConcreteMoneyInfo = (text) =>
 
 const normalizeBucketCategory = (value) => {
   const category = String(value || "").trim();
-  return BUCKET_CATEGORIES.includes(category) ? category : DEFAULT_BUCKET_CATEGORY;
+  return BUCKET_CATEGORIES.includes(category)
+    ? category
+    : DEFAULT_BUCKET_CATEGORY;
 };
 
 const parseSavingsPlan = (text) => {
   try {
-    const jsonText = text.match(/\{[\s\S]*\}/)?.[0] ?? text.match(/\[[\s\S]*\]/)?.[0] ?? text;
+    const jsonText =
+      text.match(/\{[\s\S]*\}/)?.[0] ?? text.match(/\[[\s\S]*\]/)?.[0] ?? text;
     const parsed = JSON.parse(jsonText);
     const parsedSteps = Array.isArray(parsed) ? parsed : parsed.steps;
     if (!Array.isArray(parsedSteps)) return fallbackBucketGoal;
@@ -124,12 +154,16 @@ const parseSavingsPlan = (text) => {
       .slice(0, 3)
       .map((item, index) => ({
         step: Number(item.step) || index + 1,
-        title: String(item.title || `${index + 1}단계`).replace(/^\d+단계:\s*/, "").trim(),
+        title: String(item.title || `${index + 1}단계`)
+          .replace(/^\d+단계:\s*/, "")
+          .trim(),
         description: String(item.description || "").trim(),
       }))
       .filter(
         (item) =>
-          item.title && item.description && hasConcreteMoneyInfo(item.description)
+          item.title &&
+          item.description &&
+          hasConcreteMoneyInfo(item.description),
       );
     if (steps.length !== 3) return fallbackBucketGoal;
 
@@ -171,9 +205,7 @@ const generateSavingsPlan = async (bucketList) => {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(
-      err.error || `AI 서버 연결에 실패했어요. (${res.status})`
-    );
+    throw new Error(err.error || `AI 서버 연결에 실패했어요. (${res.status})`);
   }
 
   const data = await res.json();
@@ -215,9 +247,11 @@ export default function Onboarding2() {
     return n > 0 ? n.toLocaleString() : "";
   });
   const [savingsPlan, setSavingsPlan] = useState(
-    Array.isArray(initial.savingsPlan) ? initial.savingsPlan : []
+    Array.isArray(initial.savingsPlan) ? initial.savingsPlan : [],
   );
-  const [generatedPlan, setGeneratedPlan] = useState(initial.generatedPlan ?? null);
+  const [generatedPlan, setGeneratedPlan] = useState(
+    initial.generatedPlan ?? null,
+  );
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
   const [planError, setPlanError] = useState("");
 
@@ -232,7 +266,7 @@ export default function Onboarding2() {
           quickSaveAmount: Number(quickSaveAmount.replace(/[^0-9]/g, "")) || 0,
           savingsPlan,
           generatedPlan,
-        })
+        }),
       );
     } catch {
       // ignore
@@ -241,7 +275,7 @@ export default function Onboarding2() {
 
   const quickSaveAmountNumber = useMemo(
     () => Number(quickSaveAmount.replace(/[^0-9]/g, "")) || 0,
-    [quickSaveAmount]
+    [quickSaveAmount],
   );
 
   const isValid = useMemo(() => {
@@ -252,7 +286,13 @@ export default function Onboarding2() {
       savingsPlan.length === 3 &&
       generatedPlan?.steps?.length === 3
     );
-  }, [selectedGoals, bucketList, quickSaveAmountNumber, savingsPlan, generatedPlan]);
+  }, [
+    selectedGoals,
+    bucketList,
+    quickSaveAmountNumber,
+    savingsPlan,
+    generatedPlan,
+  ]);
 
   const toggleGoal = (key) => {
     setSelectedGoals((prev) => {
@@ -304,7 +344,7 @@ export default function Onboarding2() {
       setPlanError(
         error?.message
           ? `${error.message} 기본 저축 계획으로 대신 채워뒀어요.`
-          : "AI 서버에 연결하지 못해 기본 저축 계획으로 대신 채워뒀어요."
+          : "AI 서버에 연결하지 못해 기본 저축 계획으로 대신 채워뒀어요.",
       );
     } finally {
       setIsGeneratingPlan(false);
@@ -325,7 +365,9 @@ export default function Onboarding2() {
         </div>
 
         <div className="join1-titleBlock">
-          <p className="join1-kicker">{userName} 님의 소비관리를 위한 두 번째 단계</p>
+          <p className="join1-kicker">
+            {userName} 님의 소비관리를 위한 두 번째 단계
+          </p>
           <h1 className="join1-title">어떤 목표를 설정해 볼까요?</h1>
         </div>
 
@@ -349,7 +391,9 @@ export default function Onboarding2() {
 
         <div className="join2-block">
           <p className="join2-subtitle">이루고 싶은 버킷리스트를 알려주세요</p>
-          <p className="join2-subhelp">MONY가 목표 달성을 위한 돈 모으기 3단계를 만들어드릴게요</p>
+          <p className="join2-subhelp">
+            MONY가 목표 달성을 위한 돈 모으기 3단계를 만들어드릴게요
+          </p>
           <input
             className="join2-amount"
             placeholder="이루고 싶은 버킷리스트를 입력하세요"
@@ -359,6 +403,11 @@ export default function Onboarding2() {
               setSavingsPlan([]);
               setGeneratedPlan(null);
               setPlanError("");
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && bucketList.trim() && !isGeneratingPlan) {
+                handleGeneratePlan();
+              }
             }}
           />
           <button
@@ -377,7 +426,10 @@ export default function Onboarding2() {
           {planError && <p className="join2-error">{planError}</p>}
 
           {generatedPlan && (
-            <div className="join2-category" aria-label="AI가 분류한 버킷리스트 카테고리">
+            <div
+              className="join2-category"
+              aria-label="AI가 분류한 버킷리스트 카테고리"
+            >
               <span>AI 추천 카테고리</span>
               <strong>{normalizeBucketCategory(generatedPlan.category)}</strong>
             </div>
@@ -398,7 +450,9 @@ export default function Onboarding2() {
 
         <div className="join2-block">
           <p className="join2-subtitle">한 번에 얼마씩 저축할까요?</p>
-          <p className="join2-subhelp">홈 저축 저금통의 적립 버튼에 표시될 금액이에요</p>
+          <p className="join2-subhelp">
+            홈 저축 저금통의 적립 버튼에 표시될 금액이에요
+          </p>
           <input
             className="join2-amount"
             inputMode="numeric"
@@ -431,7 +485,10 @@ export default function Onboarding2() {
             };
 
             localStorage.setItem("bucketGoal", JSON.stringify(goalData));
-            localStorage.setItem("mony_quick_save_amount", String(quickSaveAmountNumber));
+            localStorage.setItem(
+              "mony_quick_save_amount",
+              String(quickSaveAmountNumber),
+            );
             navigate("/onboarding3", {
               state: {
                 name: userName,

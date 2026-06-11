@@ -530,7 +530,7 @@ export default function Home() {
                 </div>
                 <div className="home-savingsDivider" />
                 <div className="home-savingsStat">
-                  <span>이번 달 목표</span>
+                  <span>챌린지 목표 금액</span>
                   <strong>{savingsGoal.toLocaleString()}원</strong>
                 </div>
                 <div className="home-savingsDivider" />
@@ -559,7 +559,7 @@ export default function Home() {
                   onClick={handleQuickSave}
                   disabled={isSavingToBucket}
                 >
-                  {isSavingToBucket ? "저축 중..." : `+ ${quickSaveAmountText}원 적립하기`}
+                  {isSavingToBucket ? "추가 중..." : `+ ${quickSaveAmountText}원 적립하기`}
                 </button>
                 {savingsPct >= 50 && (
                   <div className="home-savingsAchieve">
@@ -571,7 +571,7 @@ export default function Home() {
 
               {savingsToast && (
                 <div className="home-savingsToast" role="status" aria-live="polite">
-                  🪙 {quickSaveAmountText}원이 저금통에 적립됐어요!
+                  🪙 {quickSaveAmountText}원이 버킷리스트에 추가됐어요!
                 </div>
               )}
             </motion.article>
