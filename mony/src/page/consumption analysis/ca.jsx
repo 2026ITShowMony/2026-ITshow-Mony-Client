@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import coinImg from "../../assets/cm/coin.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { analysis, buckets as bucketsApi } from "../../api/index.js";
@@ -138,12 +138,28 @@ const CATEGORY_CONFIG = {
   기타: { emoji: "🌟", color: "#fbbf24" },
 };
 
-const BUCKET_TABS = [
-  { key: "all", label: "전체" },
-  { key: "여행", label: "여행" },
-  { key: "취미", label: "취미" },
-  { key: "자기계발", label: "자기계발" },
+const ONBOARDING_CATEGORY_KEYS = [
+  "joinCategories",
+  "onboardingCategories",
+  "selectedCategories",
+  "userCategories",
 ];
+
+function getOnboardingCategories() {
+  for (const key of ONBOARDING_CATEGORY_KEYS) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (typeof parsed === "string") return [parsed];
+    } catch {
+      const raw = localStorage.getItem(key);
+      if (raw) return raw.split(",").map((s) => s.trim()).filter(Boolean);
+    }
+  }
+  return null;
+}
 
 function getCat(cat) {
   return CATEGORY_CONFIG[cat] || CATEGORY_CONFIG["기타"];
@@ -347,6 +363,48 @@ function MemoryCard({ bucket, memoryData, onOpenModal }) {
   );
 }
 
+/* ─────────────────────────────────────────── 커스텀 스크롤바 훅 */
+function useScrollIndicator(ref) {
+  const [thumbTop, setThumbTop] = useState(0);
+  const [thumbHeight, setThumbHeight] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  const update = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    if (scrollHeight <= clientHeight) {
+      setVisible(false);
+      return;
+    }
+    setVisible(true);
+    const minThumb = 32;
+    const ratio = clientHeight / scrollHeight;
+    const h = Math.max(ratio * clientHeight, minThumb);
+    const maxScroll = scrollHeight - clientHeight;
+    const maxThumbTop = clientHeight - h;
+    setThumbHeight(h);
+    setThumbTop(maxScroll > 0 ? (scrollTop / maxScroll) * maxThumbTop : 0);
+  }, [ref]);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    // 약간 딜레이 후 초기 계산 (렌더 완료 후)
+    const timer = setTimeout(update, 100);
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => {
+      clearTimeout(timer);
+      el.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [ref, update]);
+
+  return { thumbTop, thumbHeight, visible };
+}
+
 /* ─────────────────────────────────────────── 메인 컴포넌트 */
 export default function Ca() {
   const name = localStorage.getItem("joinName")?.trim() || "사용자";
@@ -359,6 +417,27 @@ export default function Ca() {
   const [completedBuckets, setCompletedBuckets] = useState([]);
   const [bucketsLoading, setBucketsLoading] = useState(true);
   const [bucketTab, setBucketTab] = useState("all");
+
+  /* ── 온보딩2 카테고리로 탭 동적 생성 */
+  const [bucketTabs, setBucketTabs] = useState([{ key: "all", label: "전체" }]);
+
+  useEffect(() => {
+    const onboardingCats = getOnboardingCategories();
+    if (onboardingCats && onboardingCats.length > 0) {
+      const tabs = [
+        { key: "all", label: "전체" },
+        ...onboardingCats.map((cat) => ({ key: cat, label: cat })),
+      ];
+      setBucketTabs(tabs);
+    } else {
+      setBucketTabs([
+        { key: "all", label: "전체" },
+        { key: "여행", label: "여행" },
+        { key: "취미", label: "취미" },
+        { key: "자기계발", label: "자기계발" },
+      ]);
+    }
+  }, []);
 
   /* 추억 데이터 */
   const [memories, setMemories] = useState(() => {
@@ -376,6 +455,10 @@ export default function Ca() {
   const [modalMemo, setModalMemo] = useState("");
   const [modalDate, setModalDate] = useState("");
   const modalFileRef = useRef(null);
+
+  /* 스크롤 ref — scrollWrap 안의 grid에 붙임 */
+  const gridScrollRef = useRef(null);
+  const { thumbTop, thumbHeight, visible: scrollVisible } = useScrollIndicator(gridScrollRef);
 
   const openModal = (bucketId) => {
     const existing = memories[bucketId];
@@ -473,9 +556,11 @@ export default function Ca() {
   const filteredBuckets =
     bucketTab === "all"
       ? completedBuckets
-      : completedBuckets.filter((b) => (b.category || "기타") === bucketTab);
+      : completedBuckets.filter((b) => {
+          const cat = b.category || "기타";
+          return cat === bucketTab;
+        });
 
-  /* 이미지 디자인의 통계 수치들 */
   const statsRow = [
     { label: "전체 소비", value: "약 42%" },
     { label: "목표 성공 금액", value: "8% ↑" },
@@ -496,7 +581,6 @@ export default function Ca() {
     },
   ];
 
-  /* 모달에서 보여줄 버킷 정보 */
   const modalBucket = modalBucketId
     ? completedBuckets.find((b) => String(b.id) === String(modalBucketId))
     : null;
@@ -697,9 +781,7 @@ export default function Ca() {
               <div className="ca-sv__inner">
                 <span className="testtest">절약 분석</span>
                 <div className="ca-sv__body">
-                  {/* ── 좌측 */}
                   <div className="ca-sv__left">
-                    {/* 상단 둥근 박스: 총금액 왼쪽 / 통계3개 오른쪽 */}
                     <div className="ca-sv__topBox">
                       <div className="ca-sv__totalBlock">
                         <span className="ca-sv__totalLabel">
@@ -719,7 +801,6 @@ export default function Ca() {
                       </div>
                     </div>
 
-                    {/* 하단 카드 3개: 라벨(상단) → 서브(중간) → 큰금액(하단) */}
                     <div className="ca-sv__cards">
                       {savingsCards.map((card) => (
                         <div key={card.label} className="ca-sv__card">
@@ -733,9 +814,7 @@ export default function Ca() {
                     </div>
                   </div>
 
-                  {/* ── 우측 */}
                   <div className="ca-sv__right">
-                    {/* 코인 + 적립버튼 묶음 */}
                     <div className="ca-sv__coinWrap">
                       <div className="ca-savingsCoinArea" aria-hidden="true">
                         <span>₩</span>
@@ -750,7 +829,6 @@ export default function Ca() {
                       </button>
                     </div>
 
-                    {/* 초록 반응 박스 */}
                     <div
                       className={`ca-sv__reaction ${caSavedAmount !== null ? "is-saved" : ""}`}
                     >
@@ -855,10 +933,10 @@ export default function Ca() {
                 </div>
               </div>
 
-              {/* 카테고리 탭 */}
+              {/* 카테고리 탭 — 이모지 없음, 온보딩2 카테고리 반영 */}
               {!bucketsLoading && completedBuckets.length > 0 && (
                 <div className="ca-mc__tabs" role="tablist">
-                  {BUCKET_TABS.map((tab) => (
+                  {bucketTabs.map((tab) => (
                     <button
                       key={tab.key}
                       type="button"
@@ -916,23 +994,39 @@ export default function Ca() {
                   </div>
                 )}
 
+              {/* ── 스크롤 영역 + 커스텀 스크롤바 */}
               {!bucketsLoading && filteredBuckets.length > 0 && (
-                <motion.div
-                  className="ca-mc__grid"
-                  variants={staggerContainerVariants}
-                  initial="hidden"
-                  animate="show"
-                >
-                  {filteredBuckets.map((bucket) => (
-                    <MemoryCard
-                      key={bucket.id}
-                      bucket={bucket}
-                      memoryData={memories[bucket.id]}
-                      onSave={handleSaveMemory}
-                      onOpenModal={openModal}
+                <div className="ca-mc__scrollWrap">
+                  <motion.div
+                    className="ca-mc__grid"
+                    ref={gridScrollRef}
+                    variants={staggerContainerVariants}
+                    initial="hidden"
+                    animate="show"
+                  >
+                    {filteredBuckets.map((bucket) => (
+                      <MemoryCard
+                        key={bucket.id}
+                        bucket={bucket}
+                        memoryData={memories[bucket.id]}
+                        onSave={handleSaveMemory}
+                        onOpenModal={openModal}
+                      />
+                    ))}
+                  </motion.div>
+
+                  {/* 커스텀 스크롤 트랙 — 항상 렌더, visible로 opacity 제어 */}
+                  <div
+                    className="ca-mc__scrollTrack"
+                    aria-hidden="true"
+                    style={{ opacity: scrollVisible ? 1 : 0 }}
+                  >
+                    <div
+                      className="ca-mc__scrollThumb"
+                      style={{ top: thumbTop, height: thumbHeight }}
                     />
-                  ))}
-                </motion.div>
+                  </div>
+                </div>
               )}
             </motion.article>
           </motion.section>

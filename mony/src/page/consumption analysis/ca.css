@@ -14,6 +14,56 @@
   align-items: start;
 }
 
+.ca-mc__scrollWrap {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  /* 카드 높이 제한: 카드 2.5장 정도 보이도록 */
+  max-height: 520px;
+  min-height: 0;
+  overflow: hidden; /* 래퍼 자체는 숨김 */
+}
+
+.ca-mc__scrollWrap .ca-mc__grid {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
+  /* padding-right: 4px; */
+}
+
+.ca-mc__scrollWrap .ca-mc__grid::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+
+.ca-mc__scrollTrack {
+  position: relative;
+  width: 4px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  transition: opacity 0.2s;
+  align-self: stretch;
+}
+
+.ca-mc__scrollThumb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  min-height: 32px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 99px;
+  transition: background 0.15s;
+}
+
+.ca-mc__scrollThumb:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+
 .ca-main {
   min-width: 0;
   display: flex;
@@ -1949,6 +1999,7 @@
   gap: 6px;
   flex-wrap: wrap;
   margin: 4px 0 8px;
+  gap: 0;
 }
 
 .ca-mc__tab {
