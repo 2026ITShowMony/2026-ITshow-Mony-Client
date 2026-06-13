@@ -34,7 +34,71 @@ const DEMO_COMPLETED_BUCKETS = [
     category: "여행",
     mony_ing: 320000,
     mony_finish: 320000,
-    d_day: todayInputValue,
+    d_day: "2025-05-10",
+  },
+  {
+    id: "demo-busan",
+    title: "부산 해운대 여행",
+    category: "여행",
+    mony_ing: 250000,
+    mony_finish: 250000,
+    d_day: "2025-04-22",
+  },
+  {
+    id: "demo-japan",
+    title: "일본 나고야 여행",
+    category: "여행",
+    mony_ing: 800000,
+    mony_finish: 800000,
+    d_day: "2025-03-15",
+  },
+  {
+    id: "demo-guitar",
+    title: "기타 배우기",
+    category: "취미",
+    mony_ing: 150000,
+    mony_finish: 150000,
+    d_day: "2025-05-01",
+  },
+  {
+    id: "demo-drawing",
+    title: "수채화 클래스 등록",
+    category: "취미",
+    mony_ing: 120000,
+    mony_finish: 120000,
+    d_day: "2025-04-05",
+  },
+  {
+    id: "demo-concert",
+    title: "좋아하는 가수 콘서트 가기",
+    category: "취미",
+    mony_ing: 99000,
+    mony_finish: 99000,
+    d_day: "2025-05-05",
+  },
+  {
+    id: "demo-english",
+    title: "영어 회화 수업 등록",
+    category: "자기계발",
+    mony_ing: 200000,
+    mony_finish: 200000,
+    d_day: "2025-03-30",
+  },
+  {
+    id: "demo-book",
+    title: "독서 50권 달성",
+    category: "자기계발",
+    mony_ing: 80000,
+    mony_finish: 80000,
+    d_day: "2025-05-20",
+  },
+  {
+    id: "demo-cert",
+    title: "자격증 취득하기",
+    category: "자기계발",
+    mony_ing: 180000,
+    mony_finish: 180000,
+    d_day: "2025-04-10",
   },
 ];
 
@@ -42,7 +106,32 @@ const DEMO_MEMORIES = {
   "demo-jeju": {
     photoUrl: JejuImg,
     memo: "드디어 제주도 다녀왔어요! 🌊",
-    date: todayInputValue,
+    date: "2025-05-10",
+  },
+  "demo-busan": {
+    photoUrl: BusanImg,
+    memo: "해운대에서 먹은 해물파전 최고 🦐",
+    date: "2025-04-22",
+  },
+  "demo-japan": {
+    photoUrl: JapanImg,
+    memo: "나고야성 너무 멋있었어요. 히츠마부시도 맛있었고! 🍱",
+    date: "2025-03-15",
+  },
+  "demo-guitar": {
+    photoUrl: null,
+    memo: "드디어 F코드 성공! 3개월만에 해냈다 🎸",
+    date: "2025-05-01",
+  },
+  "demo-book": {
+    photoUrl: null,
+    memo: "올해 목표 달성! 소설 위주로 읽었는데 너무 좋았어 📚",
+    date: "2025-05-20",
+  },
+  "demo-concert": {
+    photoUrl: null,
+    memo: "평생 기억에 남을 것 같아 🎤",
+    date: "2025-05-05",
   },
 };
 
@@ -300,7 +389,7 @@ function MemoryCard({ bucket, memoryData, onOpenModal }) {
     >
       <div className="ca-mc__badges">
         <span className="ca-mc__catLabel" style={{ color: cat.color }}>
-          {cat.emoji} {bucket.category || "기타"}
+          {bucket.category || "기타"}
         </span>
         <span className="ca-mc__done">✓ 달성</span>
       </div>
@@ -520,17 +609,43 @@ export default function Ca() {
   /* 버킷 API */
   useEffect(() => {
     setBucketsLoading(true);
+
+    // bg.jsx 동일 방식: bucketGoal + mony_primary_bucket_id 로 카테고리 매핑
+    const storedBucketGoal = (() => {
+      try { return JSON.parse(localStorage.getItem("bucketGoal") || "null"); }
+      catch { return null; }
+    })();
+    const primaryBucketId = localStorage.getItem("mony_primary_bucket_id");
+    const validCats = ["여행", "취미", "자기계발", "쇼핑", "음식", "문화"];
+
+    const resolveCategory = (b) => {
+      // 1순위: 이 버킷이 primary이거나 제목이 bucketGoal.bucketList와 일치하면 bucketGoal 카테고리 사용
+      const isMatch =
+        String(b.id) === primaryBucketId ||
+        (b.title && storedBucketGoal?.bucketList &&
+          b.title.trim() === storedBucketGoal.bucketList.trim());
+      if (isMatch && storedBucketGoal?.category) return storedBucketGoal.category;
+      // 2순위: API에서 온 카테고리가 유효하면 그대로
+      if (validCats.includes(b.category)) return b.category;
+      // 3순위: 기타
+      return "기타";
+    };
+
     bucketsApi
       .getAll()
       .then((res) => {
         try {
           const all = Array.isArray(res?.data) ? res.data : [];
-          const done = all.filter((b) => {
-            const target = Number(b.mony_ing) || 0;
-            const finish = Number(b.mony_finish) || 0;
-            const prob = Number(b.probability) || 0;
-            return (target > 0 && finish >= target) || prob >= 100;
-          });
+
+          const done = all
+            .filter((b) => {
+              const target = Number(b.mony_ing) || 0;
+              const finish = Number(b.mony_finish) || 0;
+              const prob = Number(b.probability) || 0;
+              return (target > 0 && finish >= target) || prob >= 100;
+            })
+            .map((b) => ({ ...b, category: resolveCategory(b) }));
+
           setCompletedBuckets(done.length > 0 ? done : DEMO_COMPLETED_BUCKETS);
         } catch {
           setCompletedBuckets(DEMO_COMPLETED_BUCKETS);
@@ -539,6 +654,7 @@ export default function Ca() {
       .catch(() => setCompletedBuckets(DEMO_COMPLETED_BUCKETS))
       .finally(() => setBucketsLoading(false));
   }, []);
+
 
   const handleSaveMemory = (bucketId, data) => {
     const updated = { ...memories, [bucketId]: data };
@@ -1055,7 +1171,6 @@ export default function Ca() {
                 <div className="ca-modal__headLeft">
                   {modalBucket && (
                     <span className="ca-modal__bucketTitle">
-                      {getCat(modalBucket.category).emoji}{" "}
                       {modalBucket.title || modalBucket.bucket_name}
                     </span>
                   )}
