@@ -409,7 +409,6 @@ export default function Bg() {
               >
                 <div className="bg-cardHead">
                   <h3>월간 예산</h3>
-                  <span aria-hidden="true">›</span>
                 </div>
                 <div className="bg-budgetPanel2">
                   <div className="bg-budgetSummary">
@@ -476,7 +475,6 @@ export default function Bg() {
               >
                 <div className="bg-cardHead">
                   <h3>예산 가이드</h3>
-                  <span aria-hidden="true">›</span>
                 </div>
 
                 <div className="bg-guideGrid">
@@ -563,7 +561,6 @@ export default function Bg() {
               >
                 <div className="bg-cardHead">
                   <h3>버킷리스트 챌린지</h3>
-                  <span aria-hidden="true">›</span>
                 </div>
 
                 <div className="bg-challengeSummary">
