@@ -1056,6 +1056,16 @@ export default function Ca() {
             whileInView="show"
             viewport={{ once: true, amount: 0.18 }}
           >
+
+
+
+
+
+
+
+
+
+
             {/* 소비 구조 분석 */}
             <motion.article
               className="ca-card ca-card--fixed"
@@ -1063,12 +1073,9 @@ export default function Ca() {
               {...cardMotion}
             >
               <div className="ca-cardHead">
-                <h3>소비 구조 분석</h3>
+                <h3>고정 / 변동 지출</h3>
               </div>
-              <p className="ca-fixedConvert">
-                이번 달 조절 가능한 소비 중 <strong>42,000원</strong>을 저축으로
-                전환할 수 있어요.
-              </p>
+
               <div className="ca-fixedSummary">
                 {fixedItems.map((item) => (
                   <div key={item.title} className="ca-fixedRow">
@@ -1082,6 +1089,10 @@ export default function Ca() {
                   </div>
                 ))}
               </div>
+
+
+
+
               <div className="ca-fixedGrid">
                 {monthlyItems.map((item) => (
                   <div key={item.title} className="ca-fixedCard">
@@ -1099,6 +1110,14 @@ export default function Ca() {
                 ))}
               </div>
             </motion.article>
+
+
+
+
+
+
+
+
 
             {/* ══ 달성 버킷 추억 카드 ══ */}
             <motion.article

@@ -127,6 +127,13 @@
   margin: 0;
   padding: 10px 10px 32px;
   align-items: center;
+
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .ca-cardHeadStrong{
