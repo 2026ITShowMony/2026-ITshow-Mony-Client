@@ -818,18 +818,73 @@ export default function Ca() {
                   </p>
                 </div>
                 <div className="ca-miniGrid">
-                  <div className="ca-miniCard">
-                    <span>주간 | {currentWeekRangeLabel}</span>
-                    <strong>총 지출</strong>
-                    <strong>₩28,000</strong>
-                    <small>주변비례 +12%</small>
+                  {/* 왼쪽 컬럼: 일반 카드 4개 */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                    }}
+                  >
+                    <div className="ca-miniCard">
+                      <span className="One">
+                        주간 | {currentWeekRangeLabel}
+                      </span>
+                      <div className="Two">
+                        <strong className="sum">총 지출</strong>
+                        <strong className="mony">₩28,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">주별대비</strong>
+                        <strong className="mony">+12%</strong>
+                      </div>
+                    </div>
+                    <div className="ca-miniCard">
+                      <span>6월의 지출</span>
+                      <div className="Two">
+                        <strong className="sum">최대지출</strong>
+                        <strong className="mony">₩125,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">집중소비</strong>
+                        <strong className="mony">주간 소비 비중↑</strong>
+                      </div>
+                    </div>
                   </div>
-                  <div className="ca-miniCard">
-                    <span>지난달 대비 누적 소비</span>
-                    <strong>이번달 누적</strong>
-                    <strong>₩428,000</strong>
-                    <small>지난달 누적 ₩380,000</small>
+
+                  {/* 중간 컬럼: 일반 카드 2개 */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                    }}
+                  >
+                    <div className="ca-miniCard">
+                      <span>지난달 대비 누적 소비</span>
+                      <div className="Two">
+                        <strong className="sum">이번달 누적</strong>
+                        <strong className="mony">₩428,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">지난달 누적</strong>
+                        <strong className="mony">₩380,000</strong>
+                      </div>
+                    </div>
+                    <div className="ca-miniCard">
+                      <span>이번 달 소비 속도</span>
+                      <div className="Two">
+                        <strong className="sum">예상지출</strong>
+                        <strong className="mony">₩530,000</strong>
+                      </div>
+                      <div className="Two">
+                        <strong className="sum">예상 대비</strong>
+                        <strong className="mony">적정한 지출량</strong>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* 오른쪽 컬럼: steady 카드 1개 (tall) */}
                   <div className="ca-miniCard ca-miniCard--steady">
                     <span className="ca-miniCard__label">
                       안정적인 적정 소비
@@ -843,18 +898,6 @@ export default function Ca() {
                         소비 패턴의 균형의 <br /> 유지가 적절해요
                       </strong>
                     </div>
-                  </div>
-                  <div className="ca-miniCard">
-                    <span>{currentShortMonthLabel}의 지출</span>
-                    <strong>최다지출</strong>
-                    <strong>₩125,000</strong>
-                    <small>적정소비 주간 소비 비중↑</small>
-                  </div>
-                  <div className="ca-miniCard">
-                    <span>이번 달 소비 속도</span>
-                    <strong>예상지출</strong>
-                    <strong>₩530,000</strong>
-                    <small>예상 대비 적정한 지출량</small>
                   </div>
                 </div>
               </motion.article>
