@@ -15,6 +15,10 @@
   margin-bottom: 20px;
 }
 
+.bg-goalMetaValues strong:last-child {
+  color: white;
+}
+
 .bg-goalAvatarWrap {
   width: 120px;
   height: 210px;
