@@ -148,7 +148,7 @@ function FirstBanner({ onGoConsumptionManagement, name }) {
           살펴볼까요?
         </h2>
         <p className="home-heroDesc">
-          MONY와 함께한 {currentShortMonthLabel}의 소비 기록으로 인사이트를 보여드려요
+          MONY와 함께한 {currentShortMonthLabel}의 소비 기록으로<br/>인사이트를 보여드려요
         </p>
         <Motion.button
           className="home-heroButton"
@@ -210,7 +210,7 @@ function BucketListBanner({ onGoBudgetGoal, name }) {
           노력 자체는 의미가 깊어요
         </h2>
         <p className="home-heroDesc">
-          지속가능성과 성장을 고려하는 절약은 의미있는 경험으로 쌓여, 노력의 양분이 될거예요.
+          지속가능성과 성장을 고려하는 절약은 의미있는<br/>경험으로 쌓여, 노력의 양분이 될거예요.
         </p>
         <Motion.button
           className="home-heroButton"
@@ -247,7 +247,7 @@ function FriendsBanner({ name }) {
           더욱 즐겁게 다가가요
         </h2>
         <p className="home-heroDesc">
-          {name} 님의 옆에서 MONY 친구들이 용기와 동기를 부여해요.
+          {name} 님의 옆에서 MONY 친구들이<br/>용기와 동기를 부여해요.
         </p>
       </div>
 

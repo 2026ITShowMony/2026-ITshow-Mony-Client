@@ -493,7 +493,8 @@ export default function Home() {
                 <p className="home-metricLabel">오늘의 소비</p>
                 <div className="home-metricRow">
                   <h3 className="home-metricInline">
-                    총 <CountUp value={28000} suffix="원" /> / <CountUp value={100000} suffix="원" />
+                    <span className="money">총 </span>
+                    <CountUp className="money" value={28000} suffix="원" /> / <CountUp value={100000} suffix="원" />
                   </h3>
                 </div>
                 <p className="home-muted">하루 소비 목표 금액에 도달하지 않았어요</p>
