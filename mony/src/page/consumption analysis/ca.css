@@ -89,7 +89,15 @@
   background: rgba(215, 255, 71, 0.88);
   transition: height 0.12s ease;
 }
-
+.ca-fixedCardTitle{
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  align-self: stretch;
+}
 .ca-main {
   min-width: 0;
   display: flex;
@@ -622,69 +630,114 @@
 }
 
 .ca-fixedCard {
-  min-height: 138px;
-  padding: 14px;
-  border-radius: 16px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
   display: flex;
+  height: 278px;
   flex-direction: column;
   justify-content: space-between;
-  gap: 8px;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 32px 30px;
+  align-self: stretch;
 }
-
 .ca-fixedCardList {
   list-style: none;
   padding: 0;
   margin: 0;
+
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: flex-end;
+  gap: 10px;
+  align-self: stretch;
+}
+.Test1{
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 .ca-fixedCardList li {
   display: flex;
+  align-items: center;
+  gap: 3px;
+  align-self: stretch;
   justify-content: space-between;
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-}
-.ca-fixedCardList li em {
+  color: #FFF;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 14px;
   font-style: normal;
-  color: rgba(255,255,255,0.4);
-  font-size: 12px;
+  font-weight: 500;
+  line-height: normal;
+}
+.ca-fixedCardList li em 
+{
+  width: 28px;
+  color: #B6B6B6;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .ca-fixedCardMore {
-  font-size: 12px;
-  color: rgba(255,255,255,0.4);
-  text-align: right;
+  margin-left: auto;
+  color: #B6B6B6 !important;
+  text-align: right !important;
+  font-family: Pretendard;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: normal !important;
+  display: flex !important;
+  justify-content: flex-end;  
 }
 .ca-fixedCardFoot {
-  margin-top: auto;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
 }
 
 .ca-fixedCardFootLabel {
-  font-size: 11px;
-  color: rgba(255,255,255,0.4);
-  display: block;
-  margin-bottom: 4px;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  align-self: stretch;
 }
 .ca-fixedCardFootItems {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  gap: 3px;
   font-size: 12px;
+  align-self: stretch;
+  align-items: center;
   color: rgba(255,255,255,0.6);
 }
+
+.ca-bank{
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: auto;
+  white-space: nowrap;
+}
 .ca-fixedCardChip {
-  display: inline-block;
-  background: rgba(255,255,255,0.12);
-  border-radius: 4px;
-  padding: 1px 6px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.8);
-  width: fit-content;
-  text-decoration: underline;
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  white-space: nowrap; 
 }
 
 

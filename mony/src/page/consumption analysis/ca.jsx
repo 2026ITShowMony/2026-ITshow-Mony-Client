@@ -1082,13 +1082,13 @@ export default function Ca() {
                   <ul className="ca-fixedCardList">
                     <li>
                       <span>월세</span>
-                      <span>
+                      <span className="Test1">
                         500,000원&nbsp;<em>1건</em>
                       </span>
                     </li>
                     <li>
                       <span>구독</span>
-                      <span>
+                      <span className="Test1">
                         29,000원&nbsp;<em>3건</em>
                       </span>
                     </li>
@@ -1098,9 +1098,9 @@ export default function Ca() {
                     <span className="ca-fixedCardFootLabel">고정카드/계좌</span>
                     <div className="ca-fixedCardFootItems">
                       <span className="ca-fixedCardChip">토스</span>
-                      <span>토스뱅크/토스유스카드</span>
-                      <span className="ca-fixedCardMore">이외 3 건</span>
+                      <span className="ca-bank">토스뱅크/토스유스카드</span>
                     </div>
+                    <span className="ca-fixedCardMore">이외 3 건</span>
                   </div>
                 </div>
 
@@ -1122,9 +1122,9 @@ export default function Ca() {
                     <span className="ca-fixedCardFootLabel">고정카드/계좌</span>
                     <div className="ca-fixedCardFootItems">
                       <span className="ca-fixedCardChip">카카오...</span>
-                      <span>카카오뱅크/카카오체크...</span>
-                      <span className="ca-fixedCardMore">이외 2 건</span>
+                      <span className="ca-bank">카카오뱅크/카카오체크...</span>
                     </div>
+                    <span className="ca-fixedCardMore">이외 2 건</span>
                   </div>
                 </div>
               </div>
