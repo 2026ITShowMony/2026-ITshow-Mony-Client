@@ -144,7 +144,7 @@
 .menu-bottom-top-box {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 28px;
-  padding: 22px 20px;
+  padding: 22px 15px;
   min-height: 58px;
   display: flex;
   align-items: center;
@@ -161,7 +161,7 @@
 .menu-bottom-context {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 28px;
-  padding: 15px 20px 24px;
+  padding: 15px 15px 24px;
   color: rgba(255, 255, 255, 0.96);
   background: rgba(255, 255, 255, 0.02);
   font-size: 12px;

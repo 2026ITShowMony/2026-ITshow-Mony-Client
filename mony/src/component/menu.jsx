@@ -141,7 +141,7 @@ export default function Menu() {
         </div>
         <div className="menu-bottom-context">
           <span className="title">ㅤ목적을 잃지 마라 !!</span>
-          <span className="lion">ㅤ돈을 아끼는 것이 미덕이지만, ㅤ돈을 아끼는 것이 목적이  ㅤ ㅤㅤ되어서는 안 된다.</span>
+          <span className="lion">ㅤ돈을 아끼는 것이 미덕이지만,ㅤ돈을 아끼는 것이 목적이  ㅤㅤㅤ되어서는 안 된다.</span>
         </div>
         <p className="menu-resetBtn" onClick={handleReset}>처음으로 가기</p>
       </div>
